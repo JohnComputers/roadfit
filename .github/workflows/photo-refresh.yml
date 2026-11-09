@@ -1,0 +1,40 @@
+name: Refresh vehicle cover photos
+
+on:
+  schedule:
+    - cron: '29 7 3 * *'
+  workflow_dispatch:
+
+concurrency:
+  group: vehicle-photo-refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install photo encoder
+        run: python -m pip install 'Pillow>=12,<13'
+      - name: Refresh the licensed photo index
+        run: python scripts/data/build_vehicle_photos.py --refresh-rights
+      - name: Commit validated photos
+        shell: bash
+        run: |
+          git add public/assets/vehicles public/data/vehicle-images.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'data: refresh vehicle cover photos'
+          git push origin HEAD:main

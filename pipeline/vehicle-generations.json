@@ -1,0 +1,157 @@
+{
+  "families": [
+    {
+      "make": "Chevrolet",
+      "modelPattern": "(?:twin turbo )?corvette(?: .*)?",
+      "sourceUrl": "https://www.chevrolet.com/legacy/corvette",
+      "bodySpecs": {
+        "doors": 2,
+        "seats": 2,
+        "sourceUrl": "https://www.chevrolet.com/legacy/corvette"
+      },
+      "years": [
+        ["C1", 1953, 1962], ["C2", 1963, 1967], ["C3", 1968, 1982],
+        ["C4", 1984, 1996], ["C5", 1997, 2004], ["C6", 2005, 2013],
+        ["C7", 2014, 2019], ["C8", 2020, 2027]
+      ]
+    },
+    {
+      "make": "Chevrolet",
+      "modelPattern": "camaro(?: .*)?",
+      "sourceUrl": "https://www.chevrolet.com/legacy/camaro",
+      "years": [
+        ["3rd generation", 1982, 1992], ["4th generation", 1993, 2002],
+        ["5th generation", 2010, 2015], ["6th generation", 2016, 2024]
+      ]
+    },
+    {
+      "make": "Ford",
+      "modelPattern": "(?:(?:shelby|svt) [a-z0-9 ]* )?mustang(?! mach e)(?: .*)?",
+      "sourceUrl": "https://media.ford.com/content/dam/fordmedia/Europe/de/2024/04/Mustang%20Generationen.pdf",
+      "years": [
+        ["Fox Body", 1979, 1993], ["4th generation", 1994, 2004], ["5th generation", 2005, 2014],
+        ["6th generation", 2015, 2023],
+        ["7th generation", 2024, 2026, "https://www.ford.com/cars/mustang/history/"]
+      ]
+    },
+    {
+      "make": "Ford",
+      "modelPattern": "(?:f ?150)(?! lightning)(?: .*)?",
+      "sourceUrl": "https://media.ford.com/content/dam/fordmedia/fmea/middle-east/2021/F150-Press-Kit/MY21%20F-150%20%20--%20Product%20Card%20-%20En.pdf",
+      "seatingNote": {
+        "year": 2020,
+        "text": "Ford lists 3 seats for Regular Cab and 5 or 6 for SuperCab and SuperCrew. Cab style is unspecified in the EPA record.",
+        "sourceUrl": "https://media.ford.com/content/dam/fordmedia/North%20America/US/product/2020/f150/2020-F150-TechSpecs.pdf"
+      },
+      "years": [
+        ["13th generation", 2015, 2020, "https://media.ford.com/content/fordmedia/feu/ch/fr/news/2014/01/13/all-new-ford-f-150-redefines-full-size-trucks.html"],
+        ["14th generation", 2021, 2026]
+      ]
+    },
+    {
+      "make": "Honda",
+      "modelPattern": "accord(?! crosstour)(?: .*)?",
+      "sourceUrl": "https://hondanews.com/en-US/releases/release-13f25e90cfe47cd58453f1f71003d7c7-honda-accord-timeline-and-milestones",
+      "years": [
+        ["2nd generation", 1982, 1985], ["3rd generation", 1986, 1989], ["4th generation", 1990, 1993],
+        ["5th generation", 1994, 1997], ["6th generation", 1998, 2002], ["7th generation", 2003, 2007],
+        ["8th generation", 2008, 2012], ["9th generation", 2013, 2017], ["10th generation", 2018, 2022],
+        ["11th generation", 2023, 2026]
+      ]
+    },
+    {
+      "make": "Honda",
+      "modelPattern": "civic(?! del sol| crx)(?: .*)?",
+      "sourceUrl": "https://hondanews.com/en-US/releases/2016-honda-civic-sedan-press-kit-civic-history",
+      "years": [
+        ["3rd generation", 1984, 1987], ["4th generation", 1988, 1991], ["5th generation", 1992, 1995],
+        ["6th generation", 1996, 2000], ["7th generation", 2001, 2005], ["8th generation", 2006, 2011],
+        ["9th generation", 2012, 2015], ["10th generation", 2016, 2021],
+        ["11th generation", 2022, 2026, "https://hondanews.com/en-US/honda-automobiles/releases/release-53541be6030b25a47a2899aba12aa1f6-2022-honda-civic-sedan-press-kit"]
+      ]
+    },
+    {
+      "make": "Honda",
+      "modelPattern": "cr ?v(?: .*)?",
+      "sourceUrl": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones",
+      "years": [
+        ["1st generation", 1997, 2001], ["2nd generation", 2002, 2006], ["3rd generation", 2007, 2011],
+        ["4th generation", 2012, 2016], ["5th generation", 2017, 2022], ["6th generation", 2023, 2026]
+      ]
+    },
+    {
+      "make": "Mazda",
+      "modelPattern": "(?:(?:mazdaspeed )?mx ?5(?: miata)?|miata)(?: .*)?",
+      "sourceUrl": "https://news.mazdausa.com/mazda-history",
+      "bodySpecs": {
+        "doors": 2,
+        "seats": 2,
+        "sourceUrl": "https://news.mazdausa.com/download/2017-Mazda-MX-5-Press-Kit_Version-2.pdf"
+      },
+      "years": [
+        ["NA", 1990, 1997], ["NB", 1999, 2005], ["NC", 2006, 2015],
+        ["ND", 2016, 2026, "https://news.mazdausa.com/vehicles-2026-mx-5"]
+      ]
+    },
+    {
+      "make": "Porsche",
+      "modelPattern": "911(?: .*)?",
+      "sourceUrl": "https://newsroom.porsche.com/en/press-kits/911-s-t/60-years-of-the-Porsche-911.html",
+      "years": [
+        ["G series", 1974, 1989], ["964", 1989, 1994], ["993", 1995, 1998],
+        ["996", 1999, 2005, "https://newsroom.porsche.com/en_US/company/porsche-cars-north-america-historical-background-18072.html"],
+        ["997", 2005, 2012], ["991", 2012, 2019], ["992", 2020, 2026]
+      ]
+    },
+    {
+      "make": "Toyota",
+      "modelPattern": "camry(?! solara)(?: .*)?",
+      "sourceUrl": "https://pressroom.toyota.com/toyota-celebrates-production-of-10-millionth-camry-in-kentucky/",
+      "bodySpecs": {
+        "startYear": 2025,
+        "endYear": 2025,
+        "doors": 4,
+        "seats": 5,
+        "sourceUrl": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2025/my25-camry-ebrochure.pdf"
+      },
+      "years": [
+        ["1st generation", 1983, 1986], ["2nd generation", 1987, 1991], ["3rd generation", 1992, 1996],
+        ["4th generation", 1997, 2001], ["5th generation", 2002, 2006], ["6th generation", 2007, 2011],
+        ["7th generation", 2012, 2017, "https://pressroom.toyota.com/toyota-introduces-seventh-generation-camry-for-2012/"],
+        ["8th generation", 2018, 2024, "https://pressroom.toyota.com/2017-naias-detroit-toyota-camry/"],
+        ["9th generation", 2025, 2026, "https://pressroom.toyota.com/toyota-unveils-the-powerful-and-purely-hybrid-next-generation-camry/"]
+      ]
+    },
+    {
+      "make": "Toyota",
+      "modelPattern": "corolla(?! cross| im)(?: .*)?",
+      "sourceUrl": "https://pressroom.toyota.com/toyota-marks-50-millionth-corolla-sold/",
+      "years": [
+        ["5th generation", 1984, 1987, "https://pressroom.toyota.com/album/1984-1987-toyota-corolla-fifth-5th-generation/"],
+        ["6th generation", 1988, 1992, "https://pressroom.toyota.com/album/toyota-corolla-50th-anniversary-1966-2016/"],
+        ["7th generation", 1993, 1997], ["8th generation", 1998, 2002], ["9th generation", 2003, 2008],
+        ["10th generation", 2009, 2013], ["11th generation", 2014, 2018],
+        ["12th generation", 2020, 2026, "https://pressroom.toyota.com/all-new-2020-toyota-corolla-ready-to-rock-the-sedan-world/"]
+      ]
+    },
+    {
+      "make": "Toyota",
+      "modelPattern": "rav ?4(?! ev)(?: .*)?",
+      "sourceUrl": "https://pressroom.toyota.com/toyota-celebrates-25-years-of-the-rav4-in-north-america-introduces-new-se-hybrid-grade-for-2022/",
+      "years": [
+        ["1st generation", 1996, 2000], ["2nd generation", 2001, 2005], ["3rd generation", 2006, 2012],
+        ["4th generation", 2013, 2018], ["5th generation", 2019, 2025],
+        ["6th generation", 2026, 2026, "https://pressroom.toyota.com/the-next-adventure-begins-2026-rav4-arrives-this-winter/"]
+      ]
+    },
+    {
+      "make": "Toyota",
+      "modelPattern": "tacoma(?: .*)?",
+      "sourceUrl": "https://pressroom.toyota.com/2015-naias-2016-toyota-tacoma-debut-fay/",
+      "years": [
+        ["1st generation", 1995, 2004], ["2nd generation", 2005, 2015], ["3rd generation", 2016, 2023],
+        ["4th generation", 2024, 2026, "https://pressroom.toyota.com/2024-toyota-tacoma-is-the-ultimate-adventure-machine/"]
+      ]
+    }
+  ]
+}

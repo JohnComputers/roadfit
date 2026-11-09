@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
   workflow_run:
-    workflows: ["Refresh vehicle catalog"]
+    workflows: ["Refresh vehicle catalog", "Refresh vehicle cover photos"]
     types: [completed]
     branches: [main]
 
@@ -60,6 +60,12 @@ jobs:
 
       - name: Test
         run: npm test
+
+      - name: Validate catalog and cover photos
+        run: |
+          python3 -m unittest discover -s scripts/data -p 'test_*.py'
+          python3 scripts/data/validate_catalog.py
+          python3 scripts/data/build_vehicle_photos.py --validate
 
       - name: Build static app
         env:

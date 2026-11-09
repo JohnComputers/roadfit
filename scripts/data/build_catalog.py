@@ -30,6 +30,8 @@ from common import (
     source_timestamp,
     utc_now,
 )
+from epa_horsepower import SOURCE as HORSEPOWER_SOURCE, SOURCE_HOME as HORSEPOWER_HOME, lookup_horsepower, read_snapshot
+from generation_specs import enrich_vehicle, load_generation_specs
 
 
 EPA_SOURCE = "EPA/DOE FuelEconomy.gov"
@@ -384,6 +386,8 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
     vpic_meta = read_metadata(vpic_makes_path) if vpic_makes_path.exists() else {"retrievedAt": generated_at}
     prices, price_source_stats = load_prices(forcar_path, names, source_timestamp(forcar_meta))
     vpic_index = load_vpic_index(cache_dir, names)
+    horsepower_snapshot = read_snapshot()
+    generation_specs = load_generation_specs()
 
     seen_signatures: set[tuple[str, ...]] = set()
     records: list[dict[str, Any]] = []
@@ -414,6 +418,9 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
             "url": f"https://www.fueleconomy.gov/feg/Find.do?action=sbs&id={urllib.parse.quote(epa_id)}",
             "retrievedAt": source_timestamp(epa_meta), "license": config["sources"]["epa"]["license"],
         }]
+        rated_power = lookup_horsepower(row, horsepower_snapshot)
+        if rated_power:
+            provenance.append(rated_power[1])
         vpic_match = vpic_index.get((names.make(make), names.model(make, model)))
         if vpic_match:
             vpic_make_model_matches += 1
@@ -433,7 +440,7 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
                 "fuelType": fuel, "transmission": transmission(text(row.get("trany"))),
                 "drivetrain": drivetrain(text(row.get("drive"))),
                 "engine": engine_label(displacement, cylinders, row, fuel),
-                "cylinders": cylinders, "displacementL": displacement, "horsepower": None,
+                "cylinders": cylinders, "displacementL": displacement, "horsepower": rated_power[0] if rated_power else None,
                 "mpgCity": as_int(row.get("city08")), "mpgHighway": as_int(row.get("highway08")),
                 "mpgCombined": as_int(row.get("comb08")), "doors": None, "seats": None,
             },
@@ -450,14 +457,12 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
                 "vpicMakeModelMatched": bool(vpic_match),
             },
         }
+        enrich_vehicle(record, generation_specs)
         records.append(record)
 
     if not records:
         raise ValueError("Normalization produced zero records")
     records.sort(key=lambda item: (-item["year"], item["make"].casefold(), item["model"].casefold(), item["id"]))
-    version_seed = f"{epa_meta.get('sha256', sha256_file(epa_path))}:{forcar_meta.get('sha256', sha256_file(forcar_path))}"
-    catalog_version = hashlib.sha256(version_seed.encode("utf-8")).hexdigest()[:16]
-
     shard_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in records:
         y_bounds = year_band(record["year"], config["sharding"]["yearBands"])
@@ -493,6 +498,13 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
             old_path.unlink()
 
     priced_count = sum(record["price"] is not None for record in records)
+    version_seed = "\n".join(shard["sha256"] for shard in shard_manifest)
+    catalog_version = hashlib.sha256(version_seed.encode("utf-8")).hexdigest()[:16]
+    spec_coverage = {
+        field: sum(record["specs"].get(field) is not None for record in records)
+        for field in ("horsepower", "doors", "seats")
+    }
+    spec_coverage["generation"] = sum(bool(record.get("generation")) for record in records)
     years, makes = {record["year"] for record in records}, {record["make"] for record in records}
     models = {(record["make"], record["model"]) for record in records}
     stats = {
@@ -500,6 +512,7 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
         "generatedAt": generated_at, "total": len(records), "priced": priced_count,
         "priceUnavailable": len(records) - priced_count,
         "priceCoveragePercent": round(priced_count * 100 / len(records), 2),
+        "specCoverage": spec_coverage,
         "makes": len(makes), "models": len(models),
         "years": {"min": min(years), "max": max(years), "count": len(years)},
         "sourceRows": {"epa": source_rows, "forcar": price_source_stats["rows"]},
@@ -518,10 +531,16 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
             "priceMethodology": "Aggregated asking prices by make/model/model year; not completed sales or verified live inventory.",
         },
     ]
+    if horsepower_snapshot["sources"]:
+        sources.append({
+            "name": HORSEPOWER_SOURCE, "url": HORSEPOWER_HOME,
+            "retrievedAt": max(item["retrievedAt"] for item in horsepower_snapshot["sources"].values()),
+            "license": "U.S. federal government public data",
+        })
     manifest = {
         "schemaVersion": config["schemaVersion"], "catalogVersion": catalog_version,
         "generatedAt": generated_at, "total": len(records), "pricedCount": priced_count,
-        "unpricedCount": len(records) - priced_count, "shards": shard_manifest,
+        "unpricedCount": len(records) - priced_count, "shards": shard_manifest, "specCoverage": spec_coverage,
         "facetsUrl": "data/facets.json", "statsUrl": "data/catalog-stats.json",
         "idIndexUrl": "data/id-index.json", "sources": sources,
     }
@@ -529,7 +548,7 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
         "generatedAt": generated_at, "sources": sources,
         "limitations": [
             "ForCar prices are model-year asking-price aggregates, not completed-sale prices or live listings.",
-            "EPA records represent tested configurations and do not supply authoritative trim names, horsepower, doors, or seating.",
+            "FuelEconomy.gov describes tested configurations. Additional specifications are shown when separate official evidence supports a match.",
             "Missing prices and specifications remain null; RoadFit does not fabricate estimates.",
             "Images, when added separately, must not be assumed to depict an exact trim unless explicitly verified.",
         ],

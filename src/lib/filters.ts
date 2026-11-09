@@ -118,12 +118,16 @@ function includesCategory(vehicle: VehicleRecord, categories: string[]): boolean
 
 export function vehicleMatchesFilters(vehicle: VehicleRecord, filters: VehicleFilters): boolean {
   const { specs = {}, price } = vehicle;
-  const searchable = [vehicle.year, vehicle.make, vehicle.model, vehicle.trim, vehicle.bodyStyle, vehicle.category, vehicle.variantLabel]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase();
-
-  if (filters.query && !searchable.includes(filters.query.trim().toLowerCase())) return false;
+  const query = normalized(filters.query);
+  if (query) {
+    const searchable = [vehicle.year, vehicle.make, vehicle.model, vehicle.trim, vehicle.bodyStyle, vehicle.category, vehicle.variantLabel]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    const generationSearch = vehicle.generation ? `${searchable} ${vehicle.generation.name.toLowerCase()}` : '';
+    const generationMatch = generationSearch && query.split(/\s+/).every((part) => generationSearch.includes(part));
+    if (!searchable.includes(query) && !generationMatch) return false;
+  }
   if (price) {
     if (!inRange(price.average, filters.minPrice, filters.maxPrice)) return false;
   } else if (filters.priceAvailable === true || (filters.priceAvailable !== false && (filters.minPrice !== null || filters.maxPrice !== null))) {
@@ -162,40 +166,64 @@ function fitScore(vehicle: VehicleRecord, filters: VehicleFilters): number {
   return budgetUse * 0.5 + sampleConfidence * 0.25 + recency * 0.15 + Math.min(specCoverage, 1) * 0.1;
 }
 
-function numberOr(value: number | null | undefined, fallback: number): number {
-  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+function compareNumeric(left: number | null | undefined, right: number | null | undefined, direction: 1 | -1): number {
+  const leftKnown = typeof left === 'number' && Number.isFinite(left);
+  const rightKnown = typeof right === 'number' && Number.isFinite(right);
+  if (!leftKnown) return rightKnown ? 1 : 0;
+  if (!rightKnown) return -1;
+  return (left - right) * direction;
 }
 
 export function sortVehicles(vehicles: VehicleRecord[], sort: SortKey, filters: VehicleFilters): VehicleRecord[] {
+  const scores = sort === 'fit' ? new Map(vehicles.map((vehicle) => [vehicle.id, fitScore(vehicle, filters)])) : null;
   return [...vehicles].sort((a, b) => {
+    const newestFirst = () => b.year - a.year || a.make.localeCompare(b.make) || a.model.localeCompare(b.model) || a.id.localeCompare(b.id);
     switch (sort) {
       case 'price-asc':
-        return numberOr(a.price?.average, Infinity) - numberOr(b.price?.average, Infinity) || b.year - a.year;
+        return compareNumeric(a.price?.average, b.price?.average, 1) || newestFirst();
       case 'price-desc':
-        return numberOr(b.price?.average, -Infinity) - numberOr(a.price?.average, -Infinity) || b.year - a.year;
+        return compareNumeric(a.price?.average, b.price?.average, -1) || newestFirst();
       case 'year-desc':
-        return b.year - a.year || a.make.localeCompare(b.make) || a.model.localeCompare(b.model);
+        return newestFirst();
       case 'year-asc':
-        return a.year - b.year || a.make.localeCompare(b.make) || a.model.localeCompare(b.model);
+        return a.year - b.year || newestFirst();
       case 'name-asc':
-        return a.make.localeCompare(b.make) || a.model.localeCompare(b.model) || b.year - a.year;
+        return a.make.localeCompare(b.make) || a.model.localeCompare(b.model) || newestFirst();
       case 'horsepower-desc':
-        return numberOr(b.specs?.horsepower, -Infinity) - numberOr(a.specs?.horsepower, -Infinity) || b.year - a.year;
+        return compareNumeric(a.specs?.horsepower, b.specs?.horsepower, -1) || newestFirst();
       case 'mpg-desc':
-        return numberOr(b.specs?.mpgCombined, -Infinity) - numberOr(a.specs?.mpgCombined, -Infinity) || b.year - a.year;
+        return compareNumeric(a.specs?.mpgCombined, b.specs?.mpgCombined, -1) || newestFirst();
       case 'mileage-asc':
-        return numberOr(a.price?.averageMileage, Infinity) - numberOr(b.price?.averageMileage, Infinity) || b.year - a.year;
+        return compareNumeric(a.price?.averageMileage, b.price?.averageMileage, 1) || newestFirst();
       case 'sample-desc':
-        return numberOr(b.price?.sampleSize, -Infinity) - numberOr(a.price?.sampleSize, -Infinity) || b.year - a.year;
+        return compareNumeric(a.price?.sampleSize, b.price?.sampleSize, -1) || newestFirst();
       case 'fit':
       default:
-        return fitScore(b, filters) - fitScore(a, filters) || b.year - a.year || a.make.localeCompare(b.make);
+        return compareNumeric(scores?.get(a.id), scores?.get(b.id), -1) || newestFirst();
     }
   });
 }
 
 export function filterAndSortVehicles(vehicles: VehicleRecord[], filters: VehicleFilters): VehicleRecord[] {
   return sortVehicles(vehicles.filter((vehicle) => vehicleMatchesFilters(vehicle, filters)), filters.sort, filters);
+}
+
+export function vehicleModelYearKey(vehicle: VehicleRecord): string {
+  const model = normalized(vehicle.model);
+  const nameplate = model.replace(/(?:\s+(?:2wd|4wd|awd|fwd|rwd|4x2|4x4|ffv))+$/u, '');
+  const groupedModel = vehicle.bodyStyle?.toLowerCase() === 'pickup' ? nameplate.replace(/\s+pickup$/u, '') : nameplate;
+  return JSON.stringify([vehicle.year, normalized(vehicle.make), (groupedModel || model).replace(/[-\s]+/gu, '')]);
+}
+
+export function groupModelYearResults(sortedVehicles: VehicleRecord[]): Array<{ key: string; configurations: [VehicleRecord, ...VehicleRecord[]] }> {
+  const groups = new Map<string, [VehicleRecord, ...VehicleRecord[]]>();
+  for (const vehicle of sortedVehicles) {
+    const key = vehicleModelYearKey(vehicle);
+    const group = groups.get(key);
+    if (group) group.push(vehicle);
+    else groups.set(key, [vehicle]);
+  }
+  return Array.from(groups, ([key, configurations]) => ({ key, configurations }));
 }
 
 export function deriveFacets(vehicles: VehicleRecord[], selected: Pick<VehicleFilters, 'makes' | 'models'>): FilterFacets {
@@ -256,12 +284,16 @@ export function filtersFromSearchParams(searchParams: URLSearchParams): VehicleF
     if (ARRAY_KEYS.includes(key)) {
       (filters[key] as string[]) = value.split(',').filter(Boolean);
     } else if (NUMERIC_KEYS.includes(key)) {
+      if (key === 'maxPrice' && value === 'any') {
+        filters.maxPrice = null;
+        continue;
+      }
       const parsed = Number(value);
       if (Number.isFinite(parsed)) (filters[key] as number | null) = parsed;
     } else if (key === 'priceAvailable') {
       filters.priceAvailable = value === 'any' ? null : value !== 'no';
     } else if (key === 'sort') {
-      filters.sort = value as SortKey;
+      if (SORT_KEYS.includes(value as SortKey)) filters.sort = value as SortKey;
     } else if (key === 'view') {
       filters.view = value === 'list' ? 'list' : 'grid';
     } else if (key === 'query') {
@@ -283,7 +315,8 @@ export function filtersToSearchParams(filters: VehicleFilters): URLSearchParams 
   };
   if (filters.query) params.set('q', filters.query);
   setNumber('min', filters.minPrice, DEFAULT_FILTERS.minPrice);
-  setNumber('max', filters.maxPrice, DEFAULT_FILTERS.maxPrice);
+  if (filters.maxPrice === null) params.set('max', 'any');
+  else setNumber('max', filters.maxPrice, DEFAULT_FILTERS.maxPrice);
   setNumber('y0', filters.minYear, DEFAULT_FILTERS.minYear);
   setNumber('y1', filters.maxYear, DEFAULT_FILTERS.maxYear);
   setArray('make', filters.makes);

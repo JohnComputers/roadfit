@@ -1,0 +1,106 @@
+[
+  {
+    "name": "Ford 2020 F-150 technical specifications",
+    "url": "https://media.ford.com/content/dam/fordmedia/North%20America/US/product/2020/f150/2020-F150-TechSpecs.pdf",
+    "retrievedAt": "2026-11-09",
+    "year": 2020,
+    "make": "Ford",
+    "ratings": {
+      "42167": ["F150 Pickup 2WD FFV", 3.3, 6, 290],
+      "42168": ["F150 Pickup 2WD FFV", 5.0, 8, 395],
+      "42169": ["F150 2WD FFV BASE PAYLOAD LT", 5.0, 8, 395],
+      "42170": ["F150 5.0L 2WD FFV GVWR>7599 LBS", 5.0, 8, 395],
+      "42171": ["F150 Pickup 2WD", 3.5, 6, 375],
+      "42172": ["F150 Pickup 2WD Limited", 3.5, 6, 450],
+      "42173": ["F150 Pickup 2WD", 2.7, 6, 325],
+      "42174": ["F150 Pickup 4WD FFV", 3.3, 6, 290],
+      "42175": ["F150 Pickup 4WD FFV", 5.0, 8, 395],
+      "42176": ["F150 Pickup 4WD", 3.5, 6, 375],
+      "42177": ["F150 Pickup 4WD Limited", 3.5, 6, 450],
+      "42178": ["F150 RAPTOR 4WD", 3.5, 6, 450],
+      "42179": ["F150 Pickup 4WD", 2.7, 6, 325],
+      "42517": ["F150 Pickup 2WD", 3.0, 6, 250],
+      "42518": ["F150 2WD BASE PAYLOAD LT TIRE", 3.0, 6, 250],
+      "42519": ["F150 Pickup 4WD XL/XLT", 3.0, 6, 250],
+      "42520": ["F150 Pickup 4WD", 3.0, 6, 250]
+    }
+  },
+  {
+    "name": "Ford Mustang model history",
+    "url": "https://media.ford.com/content/dam/fordmedia/North%20America/US/2013/12/05/Mustang_Milestones.pdf",
+    "retrievedAt": "2026-11-09",
+    "year": 2011,
+    "make": "Ford",
+    "ratings": {
+      "30038": ["Mustang", 5.4, 8, 550],
+      "30039": ["Mustang", 3.7, 6, 305],
+      "30040": ["Mustang", 3.7, 6, 305],
+      "30041": ["Mustang", 5.0, 8, 412],
+      "30042": ["Mustang", 5.0, 8, 412],
+      "30043": ["Mustang Convertible", 3.7, 6, 305]
+    }
+  },
+  {
+    "name": "Chevrolet 1984 Corvette sales brochure",
+    "url": "https://www.auto-forever.com/wp-content/uploads/2016/12/CHEVROLET_G_1984_Corvette.pdf",
+    "retrievedAt": "2026-11-09",
+    "year": 1984,
+    "make": "Chevrolet",
+    "ratings": {
+      "26563": ["Corvette", 5.7, 8, 205],
+      "26564": ["Corvette", 5.7, 8, 205],
+      "27683": ["Corvette", 5.7, 8, 205],
+      "27684": ["Corvette", 5.7, 8, 205]
+    }
+  },
+  {
+    "name": "Chevrolet 2023 Corvette Z06 specifications",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/vehicle-groups/truck-pages/sema/03-pdfs/21CH_SEMA_VIrtual_Wheelstand_10_28_21_V2.pdf",
+    "retrievedAt": "2026-11-09",
+    "year": 2023,
+    "make": "Chevrolet",
+    "ratings": {
+      "45909": ["Corvette Z06 Carbon Aero", 5.5, 8, 670]
+    }
+  },
+  {
+    "name": "Chevrolet 2024 Corvette Z06 specifications",
+    "url": "https://media.chevrolet.com/content/dam/Media/images/US/Vehicles/Chevrolet/Cars/Corvette_Z06/2024/2024-Chevrolet-Corvette-Z06-082323.pdf",
+    "retrievedAt": "2026-11-09",
+    "year": 2024,
+    "make": "Chevrolet",
+    "ratings": {
+      "46760": ["Corvette Z06 Carbon Aero", 5.5, 8, 670]
+    }
+  },
+  {
+    "name": "Chevrolet 2025 Corvette ZR1 launch specifications",
+    "url": "https://news.chevrolet.com/newsroom.detail.html/Pages/news/us/en/2024/jul/0725-zr1.html",
+    "retrievedAt": "2026-11-09",
+    "year": 2025,
+    "make": "Chevrolet",
+    "ratings": {
+      "49031": ["Corvette ZR1", 5.5, 8, 1064]
+    }
+  },
+  {
+    "name": "Chevrolet 2026 Corvette Z06 specifications",
+    "url": "https://www.chevrolet.com/performance/previous-year/corvette/z06",
+    "retrievedAt": "2026-11-09",
+    "year": 2026,
+    "make": "Chevrolet",
+    "ratings": {
+      "49173": ["Corvette Z06 Carbon Aero", 5.5, 8, 670]
+    }
+  },
+  {
+    "name": "Chevrolet 2026 Corvette ZR1 specifications",
+    "url": "https://www.chevrolet.com/performance/previous-year/corvette/zr1",
+    "retrievedAt": "2026-11-09",
+    "year": 2026,
+    "make": "Chevrolet",
+    "ratings": {
+      "49171": ["Corvette ZR1", 5.5, 8, 1064]
+    }
+  }
+]

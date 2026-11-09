@@ -1,0 +1,366 @@
+{
+  "ranges": [
+    {
+      "make": "Chevrolet", "model": "Silverado 1500", "start": 2020, "end": 2021, "bodyStyle": "Pickup",
+      "source": "https://downloads.regulations.gov/NHTSA-2023-0022-0034/attachment_1.pdf",
+      "notes": "Fourth-generation regular 1500 only. Omits 2019 because the LD and redesign overlapped. Excludes HD and EV."
+    },
+    {
+      "make": "Chevrolet", "model": "Silverado 1500", "start": 2023, "end": 2025, "bodyStyle": "Pickup",
+      "source": "https://downloads.regulations.gov/NHTSA-2023-0022-0034/attachment_1.pdf",
+      "notes": "Refreshed regular 1500 only. Omits 2022 because LTD and refreshed versions overlapped."
+    },
+    {
+      "make": "Chevrolet", "model": "Corvette", "start": 2020, "end": 2025,
+      "source": "https://media.chevrolet.com/content/dam/Media/images/US/Release_Images/2019/08-19/2020-corvette-stingray-pricing.pdf",
+      "notes": "Mid-engine C8 Stingray only. Keep convertible and coupe distinct and exclude E-Ray, Z06 and ZR1."
+    },
+    {
+      "make": "Ford", "model": "F-150", "start": 2015, "end": 2017, "bodyStyle": "Pickup",
+      "source": "https://media.ford.com/content/fordmedia/feu/ch/fr/news/2014/01/13/all-new-ford-f-150-redefines-full-size-trucks.html",
+      "endSource": "https://media.ford.com/content/dam/fordmedia/North%20America/US/2017/05/10/2018_F150_FactSheet.pdf",
+      "notes": "Thirteenth-generation standard F-150 before the 2018 facelift. Keep Raptor, Lightning and visibly distinct packages separate."
+    },
+    {
+      "make": "Ford", "model": "F-150", "start": 2018, "end": 2020, "bodyStyle": "Pickup",
+      "source": "https://media.ford.com/content/dam/fordmedia/North%20America/US/2017/05/10/2018_F150_FactSheet.pdf",
+      "endSource": "https://media.ford.com/content/dam/fordmedia/fmea/middle-east/2021/02/15/All-New%202021%20Ford%20F-150%20Arrives%20in%20the%20Middle%20East%20-%20En.pdf",
+      "notes": "Thirteenth-generation standard F-150 after the facelift. Keep Raptor and visibly distinct packages separate."
+    },
+    {
+      "make": "Ford", "model": "F-150", "start": 2021, "end": 2023, "bodyStyle": "Pickup",
+      "source": "https://media.ford.com/content/dam/fordmedia/fmea/middle-east/2021/02/15/All-New%202021%20Ford%20F-150%20Arrives%20in%20the%20Middle%20East%20-%20En.pdf",
+      "endSource": "https://wwwqa.fromtheroad.ford.com/us/en/articles/2023/the-new-2024-ford-f-150",
+      "notes": "Fourteenth-generation standard F-150 before the 2024 update. Keep Raptor, Lightning and visibly distinct packages separate."
+    },
+    {
+      "make": "Ford", "model": "F-150", "start": 2024, "end": 2026, "bodyStyle": "Pickup",
+      "source": "https://wwwqa.fromtheroad.ford.com/us/en/articles/2023/the-new-2024-ford-f-150",
+      "notes": "Refreshed fourteenth-generation standard F-150. Keep Raptor, Lightning and visibly distinct packages separate."
+    },
+    {
+      "make": "Ford", "model": "Maverick", "start": 2022, "end": 2024, "bodyStyle": "Pickup",
+      "source": "https://www.fromtheroad.ford.com/us/en/articles/2024/hybrid-meets-all-wheel-drive-on-new-tech-packed-2025-ford-maveri",
+      "notes": "First-generation pickup before the 2025 front-end update. Excludes the earlier Maverick passenger car."
+    },
+    {
+      "make": "Ford", "model": "Mustang", "start": 2015, "end": 2017,
+      "source": "https://media.ford.com/content/dam/fordmedia/North%20America/US/product/2018/mustang/18-mustang.pdf",
+      "notes": "Original S550 coupe and convertible require separate photos. Excludes Shelby and other special editions."
+    },
+    {
+      "make": "Ford", "model": "Mustang", "start": 2018, "end": 2023,
+      "source": "https://media.ford.com/content/dam/fordmedia/North%20America/US/product/2018/mustang/18-mustang.pdf",
+      "endSource": "https://www.fromtheroad.ford.com/ca/en/articles/2022/2024-ford-mustang-reveal",
+      "notes": "Refreshed S550 regular coupe and convertible require separate photos. Excludes Shelby, Bullitt, Mach 1 and Mach-E."
+    },
+    {
+      "make": "Ford", "model": "Mustang", "start": 2024, "end": 2026,
+      "source": "https://www.fromtheroad.ford.com/ca/en/articles/2022/2024-ford-mustang-reveal",
+      "endSource": "https://www.fromtheroad.ford.com/us/en/articles/2026/whats-new-2026-ford-mustang",
+      "notes": "S650 regular coupe and convertible require separate photos. Excludes Dark Horse, GTD and Mach-E."
+    },
+    {
+      "make": "Honda", "model": "Accord", "start": 2003, "end": 2005, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/releases/release-13f25e90cfe47cd58453f1f71003d7c7-honda-accord-timeline-and-milestones",
+      "notes": "Seventh generation before the 2006 styling update. Match only known sedans."
+    },
+    {
+      "make": "Honda", "model": "Accord", "start": 2006, "end": 2007, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/releases/release-13f25e90cfe47cd58453f1f71003d7c7-honda-accord-timeline-and-milestones",
+      "notes": "Seventh generation after the 2006 styling update. Match only known sedans."
+    },
+    {
+      "make": "Honda", "model": "Accord", "start": 2013, "end": 2015, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/releases/release-13f25e90cfe47cd58453f1f71003d7c7-honda-accord-timeline-and-milestones",
+      "notes": "Ninth generation before the 2016 styling update. Match only known sedans. Keep plug-in model separate."
+    },
+    {
+      "make": "Honda", "model": "Accord", "start": 2016, "end": 2017, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/releases/release-13f25e90cfe47cd58453f1f71003d7c7-honda-accord-timeline-and-milestones",
+      "notes": "Ninth generation after the 2016 styling update. Match only known sedans."
+    },
+    {
+      "make": "Honda", "model": "Accord", "start": 2018, "end": 2020, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/releases/release-13f25e90cfe47cd58453f1f71003d7c7-honda-accord-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "Accord", "start": 2021, "end": 2022, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/releases/release-13f25e90cfe47cd58453f1f71003d7c7-honda-accord-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "Accord", "start": 2023, "end": 2025, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/releases/release-13f25e90cfe47cd58453f1f71003d7c7-honda-accord-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "Civic", "start": 2016, "end": 2018, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/releases/2019-honda-civic-americas-best-selling-car-line-gains-new-sport-model-standard-honda-sensing-and-styling-updates-with-arrival-of-2019-coupe-and-sedan",
+      "notes": "The 2019 facelift applied to the sedan and coupe first. Use only sedan photos for EPA Civic 4Dr."
+    },
+    {
+      "make": "Honda", "model": "Civic", "start": 2016, "end": 2018, "bodyStyle": "Coupe",
+      "source": "https://hondanews.com/en-US/releases/2019-honda-civic-americas-best-selling-car-line-gains-new-sport-model-standard-honda-sensing-and-styling-updates-with-arrival-of-2019-coupe-and-sedan",
+      "notes": "Use only coupe photos for EPA Civic 2Dr."
+    },
+    {
+      "make": "Honda", "model": "Civic", "start": 2019, "end": 2021, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/releases/2019-honda-civic-americas-best-selling-car-line-gains-new-sport-model-standard-honda-sensing-and-styling-updates-with-arrival-of-2019-coupe-and-sedan",
+      "endSource": "https://hondanews.com/en-US/honda-automobiles/releases/release-53541be6030b25a47a2899aba12aa1f6-2022-honda-civic-sedan-press-kit",
+      "notes": "Use only sedan photos for EPA Civic 4Dr and separate Si."
+    },
+    {
+      "make": "Honda", "model": "Civic", "start": 2019, "end": 2020, "bodyStyle": "Coupe",
+      "source": "https://hondanews.com/en-US/releases/2019-honda-civic-americas-best-selling-car-line-gains-new-sport-model-standard-honda-sensing-and-styling-updates-with-arrival-of-2019-coupe-and-sedan",
+      "notes": "Use only coupe photos for EPA Civic 2Dr and separate Si."
+    },
+    {
+      "make": "Honda", "model": "Civic", "start": 2022, "end": 2024, "bodyStyle": "Sedan",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-53541be6030b25a47a2899aba12aa1f6-2022-honda-civic-sedan-press-kit",
+      "endSource": "https://hondanews.com/en-US/honda-automobiles/releases/release-70527d767f112a34ec2e42bfb5036d06-new-2025-honda-civic-gains-powerful-hybrid-trims-sportier-styling-and-improved-tech",
+      "notes": "Use only sedan photos for EPA Civic 4Dr and separate Si."
+    },
+    {
+      "make": "Honda", "model": "CR-V", "start": 2002, "end": 2004, "bodyStyle": "SUV",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "CR-V", "start": 2005, "end": 2006, "bodyStyle": "SUV",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "CR-V", "start": 2007, "end": 2009, "bodyStyle": "SUV",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "CR-V", "start": 2010, "end": 2011, "bodyStyle": "SUV",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "CR-V", "start": 2012, "end": 2014, "bodyStyle": "SUV",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "CR-V", "start": 2015, "end": 2016, "bodyStyle": "SUV",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "CR-V", "start": 2017, "end": 2019, "bodyStyle": "SUV",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "CR-V", "start": 2020, "end": 2022, "bodyStyle": "SUV",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones"
+    },
+    {
+      "make": "Honda", "model": "CR-V", "start": 2023, "end": 2025, "bodyStyle": "SUV",
+      "source": "https://hondanews.com/en-US/honda-automobiles/releases/release-13f25e90cfe47cd58453f1f710057d45-honda-cr-v-timeline-and-milestones",
+      "notes": "Excludes e:FCEV, which has distinct body styling."
+    },
+    {
+      "make": "Jeep", "model": "Wrangler", "start": 2019, "end": 2023, "bodyStyle": "SUV",
+      "source": "https://www.media.stellantis.com/em-en/jeep/press/jeep-brand-introduces-new-2024-wrangler",
+      "notes": "Wrangler JL before its grille update. 2018 omitted because JK and JL overlapped. Match two and four doors separately."
+    },
+    {
+      "make": "Jeep", "model": "Wrangler", "start": 2024, "end": 2025, "bodyStyle": "SUV",
+      "source": "https://www.media.stellantis.com/em-en/jeep/press/jeep-brand-introduces-new-2024-wrangler",
+      "notes": "Refreshed Wrangler JL. Match two and four doors separately."
+    },
+    {
+      "make": "Nissan", "model": "Altima", "start": 2019, "end": 2022, "bodyStyle": "Sedan",
+      "source": "https://usa.nissannews.com/en-US/releases/us-2019-nissan-altima-press-kit",
+      "endSource": "https://usa.nissannews.com/en-US/releases/release-290561f98c330397b1ad2a2e7524ab94-2023-nissan-altima-boasts-a-refreshed-design-and-more-tech"
+    },
+    {
+      "make": "Nissan", "model": "Altima", "start": 2023, "end": 2026, "bodyStyle": "Sedan",
+      "source": "https://usa.nissannews.com/en-US/releases/release-290561f98c330397b1ad2a2e7524ab94-2023-nissan-altima-boasts-a-refreshed-design-and-more-tech",
+      "endSource": "https://usa.nissannews.com/en-US/releases/2026-nissan-altima-press-kit"
+    },
+    {
+      "make": "Nissan", "model": "Rogue", "start": 2021, "end": 2023, "bodyStyle": "SUV",
+      "source": "https://usa.nissannews.com/en-US/releases/rogue-refreshed-why-minor-design-changes-are-a-major-opportunity",
+      "notes": "Excludes Rogue Sport and Rogue Select."
+    },
+    {
+      "make": "Nissan", "model": "Rogue", "start": 2024, "end": 2025, "bodyStyle": "SUV",
+      "source": "https://usa.nissannews.com/en-US/releases/2025-nissan-rogue-press-kit",
+      "notes": "Excludes Rogue Sport, Rogue Select and Rock Creek."
+    },
+    {
+      "make": "Nissan", "model": "370Z", "start": 2009, "end": 2012, "bodyStyle": "Coupe",
+      "source": "https://usa.nissannews.com/en-US/releases/us-2010-nissan-370z-coupe-press-kit",
+      "endSource": "https://usa.nissannews.com/en-US/releases/us-2013-nissan-370z-coupe-press-kit",
+      "notes": "Pre-facelift regular coupe. Excludes NISMO and Roadster."
+    },
+    {
+      "make": "Nissan", "model": "370Z", "start": 2013, "end": 2017, "bodyStyle": "Coupe",
+      "source": "https://usa.nissannews.com/en-US/releases/us-2013-nissan-370z-coupe-press-kit",
+      "notes": "Facelift regular coupe with LED running lights. Excludes NISMO and Roadster."
+    },
+    {
+      "make": "Nissan", "model": "370Z", "start": 2018, "end": 2020, "bodyStyle": "Coupe",
+      "source": "https://usa.nissannews.com/en-US/releases/us-2020-nissan-370z-coupe-press-kit",
+      "notes": "Later regular coupe with darkened light housings. Excludes NISMO and Roadster."
+    },
+    {
+      "make": "Nissan", "model": "Z", "start": 2023, "end": 2026, "bodyStyle": "Coupe",
+      "source": "https://usa.nissannews.com/en-US/releases/2023-nissan-z-press-kit",
+      "endSource": "https://usa.nissannews.com/en-US/releases/stories-5-new-nostalgic-nods-included-in-the-2027-nissan-z",
+      "notes": "Standard production model. Excludes Z NISMO and the earlier 370Z."
+    },
+    {
+      "make": "Ram", "model": "1500", "start": 2019, "end": 2024, "bodyStyle": "Pickup",
+      "source": "https://blog.stellantisnorthamerica.com/2018/02/01/a-bold-new-benchmark-by-design-2019-ram-1500/",
+      "endSource": "https://www.media.stellantis.com/em-en/ram/press/new-2025-ram-1500-with-more-powerful-more-fuel-efficient-hurricane-engine-family-unveiled",
+      "notes": "Fifth-generation DT standard 1500. Excludes the concurrent DS Classic, Warlock, TRX and other special variants."
+    },
+    {
+      "make": "Toyota", "model": "4Runner", "start": 2010, "end": 2013, "bodyStyle": "SUV",
+      "source": "https://pressroom.toyota.com/toyota-4runner-icons-fifth-2010-2024-sixth-2025-generations/",
+      "endSource": "https://pressroom.toyota.com/2014-4runner-design-match-off-road-heritage/"
+    },
+    {
+      "make": "Toyota", "model": "4Runner", "start": 2014, "end": 2020, "bodyStyle": "SUV",
+      "source": "https://pressroom.toyota.com/2014-4runner-design-match-off-road-heritage/",
+      "endSource": "https://pressroom.toyota.com/happier-trails-2021-toyota-4runner-adds-new-trail-special-edition/",
+      "notes": "Post-facelift mainstream 4Runner before the LED light update. Match Trail and TRD variants separately."
+    },
+    {
+      "make": "Toyota", "model": "4Runner", "start": 2021, "end": 2024, "bodyStyle": "SUV",
+      "source": "https://pressroom.toyota.com/happier-trails-2021-toyota-4runner-adds-new-trail-special-edition/",
+      "endSource": "https://pressroom.toyota.com/toyota-4runner-icons-fifth-2010-2024-sixth-2025-generations/",
+      "notes": "Mainstream 4Runner with LED lights. Match Trail and TRD variants separately."
+    },
+    {
+      "make": "Toyota", "model": "86", "start": 2017, "end": 2020, "bodyStyle": "Coupe",
+      "source": "https://pressroom.toyota.com/2017-toyota-86-is-affordable-fundamental-sports-car/",
+      "endSource": "https://pressroom.toyota.com/all-new-2022-toyota-gr-86-thrills-around-every-corner/",
+      "notes": "Facelift first generation, North American Toyota 86. Excludes Scion FR-S and second-generation GR86."
+    },
+    {
+      "make": "Toyota", "model": "Camry", "start": 2007, "end": 2009, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/album/2007-2009-toyota-camry-sixth-6th-generation/",
+      "endSource": "https://pressroom.toyota.com/camry-gains-new-powertrain-new-styling-for-2010/",
+      "notes": "North American styling."
+    },
+    {
+      "make": "Toyota", "model": "Camry", "start": 2010, "end": 2011, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/camry-gains-new-powertrain-new-styling-for-2010/",
+      "endSource": "https://pressroom.toyota.com/toyota-introduces-seventh-generation-camry-for-2012/",
+      "notes": "North American styling."
+    },
+    {
+      "make": "Toyota", "model": "Camry", "start": 2012, "end": 2014, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/toyota-introduces-seventh-generation-camry-for-2012/",
+      "endSource": "https://pressroom.toyota.com/2015-toyota-camry-top-class-redesign/",
+      "notes": "North American styling."
+    },
+    {
+      "make": "Toyota", "model": "Camry", "start": 2015, "end": 2017, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/2015-toyota-camry-top-class-redesign/",
+      "endSource": "https://pressroom.toyota.com/all-new-2018-toyota-camry-launch/",
+      "notes": "North American styling."
+    },
+    {
+      "make": "Toyota", "model": "Camry", "start": 2018, "end": 2020, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/all-new-2018-toyota-camry-launch/",
+      "endSource": "https://pressroom.toyota.com/clear-cut-leader-the-2021-toyota-camry-adds-more-variants-while-advancing-safety/",
+      "notes": "North American styling. Keep TRD separate."
+    },
+    {
+      "make": "Toyota", "model": "Camry", "start": 2021, "end": 2024, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/clear-cut-leader-the-2021-toyota-camry-adds-more-variants-while-advancing-safety/",
+      "endSource": "https://pressroom.toyota.com/toyota-unveils-the-powerful-and-purely-hybrid-next-generation-camry/",
+      "notes": "North American styling. Keep TRD separate."
+    },
+    {
+      "make": "Toyota", "model": "Camry", "start": 2025, "end": 2026, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/toyota-unveils-the-powerful-and-purely-hybrid-next-generation-camry/",
+      "endSource": "https://pressroom.toyota.com/toyota-camry-brings-bold-new-nightshade-edition-to-lineup-in-2026/"
+    },
+    {
+      "make": "Toyota", "model": "Corolla", "start": 2014, "end": 2016, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/toyota-reveals-next-generation-corolla-june6/",
+      "endSource": "https://pressroom.toyota.com/2017-toyota-corolla-50-n-fabulous/",
+      "notes": "North American sedan."
+    },
+    {
+      "make": "Toyota", "model": "Corolla", "start": 2017, "end": 2019, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/2017-toyota-corolla-50-n-fabulous/",
+      "endSource": "https://pressroom.toyota.com/driving-and-design-highlight-the-all-new-2020-toyota-corolla/",
+      "notes": "North American sedan. Excludes Corolla iM and Hatchback."
+    },
+    {
+      "make": "Toyota", "model": "Corolla", "start": 2020, "end": 2022, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/driving-and-design-highlight-the-all-new-2020-toyota-corolla/",
+      "endSource": "https://pressroom.toyota.com/2023-toyota-corolla-sedan-revs-up-power-safety-tech-and-value/",
+      "notes": "North American sedan. Excludes Hatchback, GR and Cross."
+    },
+    {
+      "make": "Toyota", "model": "Corolla", "start": 2023, "end": 2025, "bodyStyle": "Sedan",
+      "source": "https://pressroom.toyota.com/2023-toyota-corolla-sedan-revs-up-power-safety-tech-and-value/",
+      "notes": "North American sedan. Excludes Hatchback, GR and Cross."
+    },
+    {
+      "make": "Toyota", "model": "GR Supra", "start": 2020, "end": 2025, "bodyStyle": "Coupe",
+      "source": "https://pressroom.toyota.com/its-back-2020-gr-supra-ready-for-road/",
+      "notes": "Standard A90/A91 road car. Excludes earlier Supra generations and 2026 MkV Final Edition."
+    },
+    {
+      "make": "Toyota", "model": "Highlander", "start": 2014, "end": 2016, "bodyStyle": "SUV",
+      "source": "https://pressroom.toyota.com/2014-toyota-highlander-world-debut-ny-auto-show-march27/",
+      "endSource": "https://pressroom.toyota.com/toyota-2017-highlander-march14/"
+    },
+    {
+      "make": "Toyota", "model": "Highlander", "start": 2017, "end": 2019, "bodyStyle": "SUV",
+      "source": "https://pressroom.toyota.com/toyota-2017-highlander-march14/",
+      "endSource": "https://pressroom.toyota.com/toyotas-fourth-generation-2020-highlander-redesigned-from-the-ground-up/"
+    },
+    {
+      "make": "Toyota", "model": "Highlander", "start": 2020, "end": 2025, "bodyStyle": "SUV",
+      "source": "https://pressroom.toyota.com/toyotas-fourth-generation-2020-highlander-redesigned-from-the-ground-up/",
+      "endSource": "https://pressroom.toyota.com/2023-toyota-highlander-revs-up-driving-with-new-turbocharged-engine/",
+      "notes": "Excludes Grand Highlander."
+    },
+    {
+      "make": "Toyota", "model": "Prius", "start": 2019, "end": 2022, "bodyStyle": "Hatchback",
+      "source": "https://pressroom.toyota.com/2019-prius-most-capable-thanks-available-new-awd-e-system/",
+      "endSource": "https://pressroom.toyota.com/the-time-is-now-for-toyotas-all-new-2023-prius-and-prius-prime/",
+      "notes": "Standard Prius after facelift. The Prius Prime used visually distinct styling in this period."
+    },
+    {
+      "make": "Toyota", "model": "Prius", "start": 2023, "end": 2025, "bodyStyle": "Hatchback",
+      "source": "https://pressroom.toyota.com/the-time-is-now-for-toyotas-all-new-2023-prius-and-prius-prime/",
+      "notes": "Fifth-generation Prius. Keep Prime, c and v separate."
+    },
+    {
+      "make": "Toyota", "model": "RAV4", "start": 2016, "end": 2018, "bodyStyle": "SUV",
+      "source": "https://pressroom.toyota.com/toyota-2016-rav4-hybrid-debut/",
+      "endSource": "https://pressroom.toyota.com/all-new-2019-toyota-rav4-breaks-the-mold-for-the-segment-it-created/"
+    },
+    {
+      "make": "Toyota", "model": "RAV4", "start": 2019, "end": 2021, "bodyStyle": "SUV",
+      "source": "https://pressroom.toyota.com/all-new-2019-toyota-rav4-breaks-the-mold-for-the-segment-it-created/",
+      "endSource": "https://pressroom.toyota.com/toyota-celebrates-25-years-of-the-rav4-in-north-america-introduces-new-se-hybrid-grade-for-2022/",
+      "notes": "Fifth generation before the 2022 headlight update. Keep Prime and off-road editions separate."
+    },
+    {
+      "make": "Toyota", "model": "RAV4", "start": 2022, "end": 2025, "bodyStyle": "SUV",
+      "source": "https://pressroom.toyota.com/toyota-celebrates-25-years-of-the-rav4-in-north-america-introduces-new-se-hybrid-grade-for-2022/",
+      "endSource": "https://pressroom.toyota.com/three-two-one-toyota-debuts-amazing-all-new-rav4/",
+      "notes": "Fifth generation after the 2022 headlight update. Keep Prime and off-road editions separate."
+    },
+    {
+      "make": "Toyota", "model": "Tacoma", "start": 2016, "end": 2019, "bodyStyle": "Pickup",
+      "source": "https://pressroom.toyota.com/2016-toyota-tacoma-debut-aug17/",
+      "endSource": "https://pressroom.toyota.com/2020-toyota-tacoma-positioned-to-continue-segment-leadership-with-host-of-new-upgrades/",
+      "notes": "Third-generation before facelift. Match known cab type and keep TRD Pro separate."
+    },
+    {
+      "make": "Toyota", "model": "Tacoma", "start": 2020, "end": 2023, "bodyStyle": "Pickup",
+      "source": "https://pressroom.toyota.com/2020-toyota-tacoma-positioned-to-continue-segment-leadership-with-host-of-new-upgrades/",
+      "endSource": "https://pressroom.toyota.com/all-new-2024-toyota-tacoma-is-adventure-ready-out-of-the-box/",
+      "notes": "Refreshed third generation. Match known cab type and keep TRD Pro separate."
+    }
+  ]
+}

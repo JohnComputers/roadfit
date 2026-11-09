@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-09T01:59:29Z",
+  "generatedAt": "2026-11-09T22:18:46Z",
   "sources": [
     {
       "name": "EPA/DOE FuelEconomy.gov",
@@ -19,11 +19,17 @@
       "retrievedAt": "2026-11-08T19:39:50Z",
       "license": "CC BY 4.0",
       "priceMethodology": "Aggregated asking prices by make/model/model year; not completed sales or verified live inventory."
+    },
+    {
+      "name": "EPA Fuel Economy Test Car List",
+      "url": "https://www.epa.gov/compliance-and-fuel-economy-data/data-cars-used-testing-fuel-economy",
+      "retrievedAt": "2026-11-09T22:15:35Z",
+      "license": "U.S. federal government public data"
     }
   ],
   "limitations": [
     "ForCar prices are model-year asking-price aggregates, not completed-sale prices or live listings.",
-    "EPA records represent tested configurations and do not supply authoritative trim names, horsepower, doors, or seating.",
+    "FuelEconomy.gov describes tested configurations. Additional specifications are shown when separate official evidence supports a match.",
     "Missing prices and specifications remain null; RoadFit does not fabricate estimates.",
     "Images, when added separately, must not be assumed to depict an exact trim unless explicitly verified."
   ]

@@ -9,7 +9,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useCompare } from '../contexts/CompareContext';
 import { useSavedCars } from '../contexts/SavedCarsContext';
 import { useToast } from '../contexts/ToastContext';
-import { DEFAULT_FILTERS } from '../lib/filters';
+import { DEFAULT_FILTERS, groupModelYearResults, vehicleModelYearKey } from '../lib/filters';
 import { formatCurrency, formatDate, formatNumber, titleCase } from '../lib/format';
 import { findVehicleById, loadCatalog, loadModelYears } from '../services/catalog';
 import type { VehicleRecord } from '../types/vehicle';
@@ -39,23 +39,32 @@ export function VehicleDetailPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const yearHint = Number(searchParams.get('vy')) || undefined;
-  const budget = Number(searchParams.get('max')) || DEFAULT_FILTERS.maxPrice || 25000;
+  const budgetParam = searchParams.get('max');
+  const budget = budgetParam !== null && budgetParam.trim() !== '' && Number.isFinite(Number(budgetParam)) && Number(budgetParam) >= 0
+    ? Number(budgetParam)
+    : DEFAULT_FILTERS.maxPrice ?? 25000;
 
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
     setError(null);
+    setRelated([]);
+    setModelYears([]);
     void findVehicleById(decodeURIComponent(vehicleId), controller.signal, yearHint)
-      .then(async ({ vehicle: found }) => {
+      .then(({ vehicle: found }) => {
+        if (controller.signal.aborted) return;
         if (!found) throw new Error('That vehicle record was not found in the current catalog.');
         setVehicle(found);
-        void loadModelYears(found.make, found.model, controller.signal).then(setModelYears).catch(() => setModelYears([]));
-        const result = await loadCatalog(
+        setLoading(false);
+        void loadModelYears(found.make, found.model, controller.signal)
+          .then((years) => { if (!controller.signal.aborted) setModelYears(years); })
+          .catch(() => { /* Model-year navigation is optional. */ });
+        void loadCatalog(
           { ...DEFAULT_FILTERS, minPrice: null, maxPrice: null, minYear: found.year, maxYear: found.year, priceAvailable: null },
           controller.signal,
-        );
-        setRelated(result.vehicles.filter((candidate) => candidate.year === found.year));
-        setLoading(false);
+        ).then((result) => {
+          if (!controller.signal.aborted) setRelated(result.vehicles.filter((candidate) => candidate.year === found.year));
+        }).catch(() => { /* Similar cars are optional. */ });
       })
       .catch((loadError) => {
         if (controller.signal.aborted) return;
@@ -65,16 +74,21 @@ export function VehicleDetailPage() {
     return () => controller.abort();
   }, [vehicleId, yearHint]);
 
-  const alternatives = useMemo(
-    () => related.filter((candidate) => candidate.id !== vehicle?.id && candidate.make === vehicle?.make && candidate.model === vehicle?.model).slice(0, 6),
-    [related, vehicle],
-  );
+  const alternatives = useMemo(() => {
+    if (!vehicle) return [];
+    const modelYear = vehicleModelYearKey(vehicle);
+    return related.filter((candidate) => candidate.id !== vehicle.id && vehicleModelYearKey(candidate) === modelYear).slice(0, 6);
+  }, [related, vehicle]);
   const similar = useMemo(() => {
     if (!vehicle) return [];
-    return related
+    const ranked = related
       .filter((candidate) => candidate.id !== vehicle.id && candidate.make !== vehicle.make && (candidate.bodyStyle === vehicle.bodyStyle || candidate.category === vehicle.category))
-      .sort((a, b) => Math.abs((a.price?.average ?? budget) - (vehicle.price?.average ?? budget)) - Math.abs((b.price?.average ?? budget) - (vehicle.price?.average ?? budget)))
-      .slice(0, 4);
+      .sort((a, b) => {
+        if (Boolean(a.price) !== Boolean(b.price)) return a.price ? -1 : 1;
+        const target = vehicle.price?.average ?? budget;
+        return Math.abs((a.price?.average ?? target) - target) - Math.abs((b.price?.average ?? target) - target);
+      })
+    return groupModelYearResults(ranked).slice(0, 4).map(({ configurations }) => configurations[0]);
   }, [related, vehicle, budget]);
 
   const handleSave = async () => {
@@ -104,22 +118,26 @@ export function VehicleDetailPage() {
   const price = vehicle.price;
   const budgetDifference = price ? budget - price.average : null;
   const budgetPercent = price ? Math.min((price.average / Math.max(budget, 1)) * 100, 100) : 0;
-  const exactImage = vehicle.image?.representsExactVehicle;
   const searchQuery = `${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.trim ? ` ${vehicle.trim}` : ''} for sale`;
   const efficiencyUnit = vehicle.specs?.efficiencyUnit || vehicle.sourceDetails?.efficiencyUnit || (vehicle.specs?.fuelType?.toLowerCase() === 'ev' ? 'MPGe' : 'MPG');
-  const adjustedBudgetParams = new URLSearchParams(searchParams);
-  adjustedBudgetParams.delete('vy');
+  const discoveryParams = new URLSearchParams(searchParams);
+  discoveryParams.delete('vy');
+  const adjustedBudgetParams = new URLSearchParams(discoveryParams);
   adjustedBudgetParams.set('max', String(Math.max(price?.average ?? budget, budget)));
+  const generation = vehicle.generation;
+  const generationParams = generation ? new URLSearchParams({
+    make: vehicle.make, model: vehicle.model, y0: String(generation.startYear), y1: String(generation.endYear), priced: 'any', max: 'any',
+  }) : null;
 
   return (
     <>
       <section className="detail-hero page-section">
         <div className="container">
-          <Link className="back-link" to={`/${location.search.replace(/([?&])vy=[^&]*&?/, '$1').replace(/[?&]$/, '')}`}><ArrowLeft aria-hidden="true" /> Back to results</Link>
+          <Link className="back-link" to={discoveryParams.size ? `/?${discoveryParams}` : '/'}><ArrowLeft aria-hidden="true" /> Back to results</Link>
           <div className="detail-hero-grid">
-            <div className="detail-art"><VehicleArtwork vehicle={vehicle} /></div>
+            <VehicleArtwork vehicle={vehicle} detail />
             <div className="detail-summary">
-              <div className="detail-badges"><span>{vehicle.year}</span><span>{vehicle.bodyStyle || vehicle.category || 'Body type unavailable'}</span>{vehicle.sourceDetails?.vpicMakeModelMatched ? <span className="verified"><ShieldCheck aria-hidden="true" /> vPIC make/model match</span> : null}</div>
+              <div className="detail-badges"><span>{vehicle.year}</span>{generation ? <span>{generation.name}</span> : null}<span>{vehicle.bodyStyle || vehicle.category || 'Body type unavailable'}</span>{vehicle.sourceDetails?.vpicMakeModelMatched ? <span className="verified"><ShieldCheck aria-hidden="true" /> vPIC make/model match</span> : null}</div>
               <h1>{vehicle.make} {vehicle.model}</h1>
               <p className="detail-variant">{vehicle.trim || vehicle.variantLabel || [vehicle.specs?.engine, vehicle.specs?.transmission, vehicle.specs?.drivetrain].filter(Boolean).join(' · ')}</p>
               <div className="detail-price"><span>Average asking price</span><strong>{formatCurrency(price?.average)}</strong><small>{price ? `Based on ${formatNumber(price.sampleSize)} listings · model-year level` : 'No supported market-price record'}</small></div>
@@ -131,7 +149,6 @@ export function VehicleDetailPage() {
                   {compare.has(vehicle.id) ? <Check aria-hidden="true" /> : <GitCompareArrows aria-hidden="true" />}{compare.has(vehicle.id) ? 'Added to compare' : 'Compare'}
                 </button>
               </div>
-              {!exactImage && vehicle.image ? <p className="image-note">The image is representative and is not verified as this exact trim or configuration.</p> : null}
             </div>
           </div>
         </div>
@@ -146,8 +163,18 @@ export function VehicleDetailPage() {
               <Link to={`/?${adjustedBudgetParams.toString()}#catalog-results`} className="text-link">Adjust budget without losing discovery <span aria-hidden="true">→</span></Link>
             </section>
 
+            {generation && generationParams ? (
+              <section className="detail-panel">
+                <div className="panel-heading"><div><span className="section-kicker">U.S. model generation</span><h2>{generation.name}</h2></div><span>{generation.startYear}–{generation.endYear}</span></div>
+                <div className="detail-actions">
+                  <Link className="text-link" to={`/?${generationParams}#catalog-results`}>Browse this generation</Link>
+                  <a className="text-link" href={generation.sourceUrl} target="_blank" rel="noreferrer">Generation source <ExternalLink aria-hidden="true" /></a>
+                </div>
+              </section>
+            ) : null}
+
             <section className="detail-panel">
-              <div className="panel-heading"><div><span className="section-kicker">Configuration</span><h2>Specifications</h2></div><span className="data-source-chip">EPA / DOE data</span></div>
+              <div className="panel-heading"><div><span className="section-kicker">Configuration</span><h2>Specifications</h2></div><span className="data-source-chip">Sourced specs</span></div>
               <div className="spec-grid">
                 <SpecItem label="Fuel" value={titleCase(vehicle.specs?.fuelType)} icon={Fuel} />
                 <SpecItem label="Combined efficiency" value={vehicle.specs?.mpgCombined ? `${vehicle.specs.mpgCombined} ${efficiencyUnit}` : null} icon={Route} />
@@ -163,10 +190,15 @@ export function VehicleDetailPage() {
                 <SpecItem label="EPA class" value={vehicle.sourceDetails?.epaVehicleClass} />
                 {vehicle.sourceDetails?.electricRangeMiles ? <SpecItem label="Electric range" value={`${vehicle.sourceDetails.electricRangeMiles} mi`} /> : null}
               </div>
-              <p className="missing-note"><Info aria-hidden="true" /> Blank values are not estimated. EPA records often describe powertrain configurations rather than marketing trims and do not provide horsepower.</p>
+              {vehicle.sourceDetails?.seatingNote ? <p className="missing-note"><UsersRound aria-hidden="true" /> {vehicle.sourceDetails.seatingNote}</p> : null}
+              <p className="missing-note"><Info aria-hidden="true" /> Specifications show available data for this configuration. See Sources for the evidence behind added horsepower, door, or seat counts.</p>
             </section>
 
-            {alternatives.length ? <section className="detail-panel"><div className="panel-heading"><div><span className="section-kicker">Same model-year</span><h2>Alternative configurations</h2></div><span>{alternatives.length} shown</span></div><div className="alternative-list">{alternatives.map((candidate) => <Link key={candidate.id} to={`/vehicle/${candidate.id}?vy=${candidate.year}`}><span>{candidate.specs?.engine || candidate.model}</span><strong>{[candidate.specs?.transmission, candidate.specs?.drivetrain].filter(Boolean).join(' · ') || 'Specs vary'}</strong><small>{candidate.specs?.mpgCombined ? `${candidate.specs.mpgCombined} ${candidate.sourceDetails?.efficiencyUnit || 'MPG'}` : 'Efficiency unavailable'}</small></Link>)}</div></section> : null}
+            {alternatives.length ? <section className="detail-panel"><div className="panel-heading"><div><span className="section-kicker">Same model-year</span><h2>Alternative configurations</h2></div><span>{alternatives.length} shown</span></div><div className="alternative-list">{alternatives.map((candidate) => {
+              const candidateParams = new URLSearchParams(discoveryParams);
+              candidateParams.set('vy', String(candidate.year));
+              return <Link key={candidate.id} to={`/vehicle/${candidate.id}?${candidateParams}`}><span>{candidate.specs?.engine || candidate.model}</span><strong>{[candidate.specs?.transmission, candidate.specs?.drivetrain].filter(Boolean).join(' · ') || 'Specs vary'}</strong><small>{candidate.specs?.mpgCombined ? `${candidate.specs.mpgCombined} ${candidate.sourceDetails?.efficiencyUnit || 'MPG'}` : 'Efficiency unavailable'}</small></Link>;
+            })}</div></section> : null}
             {modelYears.length > 1 ? <section className="detail-panel"><div className="panel-heading"><div><span className="section-kicker">Across the catalog</span><h2>Available model years</h2></div><CalendarDays aria-hidden="true" /></div><div className="year-variant-list">{modelYears.map((year) => <Link className={year === vehicle.year ? 'current' : ''} key={year} to={`/?make=${encodeURIComponent(vehicle.make)}&model=${encodeURIComponent(vehicle.model)}&y0=${year}&y1=${year}`}>{year}</Link>)}</div></section> : null}
           </div>
 
@@ -190,7 +222,7 @@ export function VehicleDetailPage() {
             </section>
             <section className="detail-panel provenance-panel">
               <span className="section-kicker">Traceable record</span><h2>Sources</h2>
-              {vehicle.provenance.map((source, index) => <a key={`${source.source}-${index}`} href={source.url || undefined} target="_blank" rel="noreferrer"><div><strong>{source.source}</strong><span>{source.license || 'License details unavailable'}</span></div>{source.url ? <ExternalLink aria-hidden="true" /> : null}</a>)}
+              {vehicle.provenance.map((source, index) => <a key={`${source.source}-${index}`} href={source.url || undefined} target="_blank" rel="noreferrer"><div><strong>{source.source}</strong><span>{source.fields?.length ? source.fields.join(', ') : source.license || 'License details unavailable'}</span></div>{source.url ? <ExternalLink aria-hidden="true" /> : null}</a>)}
               <Link to="/sources" className="text-link">Read methodology & limitations</Link>
             </section>
           </aside>

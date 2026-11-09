@@ -38,15 +38,31 @@ export interface Provenance {
   url?: string | null;
   retrievedAt: string;
   license?: string | null;
+  fields?: string[];
+}
+
+export interface VehicleGeneration {
+  name: string;
+  startYear: number;
+  endYear: number;
+  sourceUrl: string;
 }
 
 export interface VehicleImage {
   url: string;
   alt?: string;
+  title?: string;
+  scope?: 'model-year' | 'generation';
+  depictedYear?: number;
+  generationSource?: string;
   representsExactVehicle?: boolean;
   creator?: string;
+  creatorUrl?: string;
+  creditText?: string;
+  copyrightNotice?: string;
   sourceUrl?: string;
   license?: string;
+  licenseUrl?: string;
 }
 
 export interface VehicleRecord {
@@ -58,6 +74,7 @@ export interface VehicleRecord {
   category?: string | null;
   categories?: string[];
   bodyStyle?: string | null;
+  generation?: VehicleGeneration | null;
   price?: PriceData | null;
   specs?: VehicleSpecs;
   image?: VehicleImage | null;
@@ -75,6 +92,7 @@ export interface VehicleRecord {
     electricRangeMiles?: number | null;
     chargeTimeHours240V?: number | null;
     vpicMakeModelMatched?: boolean;
+    seatingNote?: string;
   };
 }
 
@@ -111,6 +129,7 @@ export interface CatalogManifest {
   pricedRecords?: number;
   pricedCount?: number;
   unpricedCount?: number;
+  specCoverage?: { horsepower: number; doors: number; seats: number; generation: number };
   modelYears?: number;
   makes?: number;
   minYear?: number;

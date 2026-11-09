@@ -8,7 +8,7 @@ import { FilterSidebar } from '../components/FilterSidebar';
 import { CatalogSkeleton } from '../components/Skeletons';
 import { VehicleCard } from '../components/VehicleCard';
 import { useAuth } from '../contexts/AuthContext';
-import { activeFilterCount, DEFAULT_FILTERS, deriveFacets, filterAndSortVehicles, filtersFromSearchParams, filtersFromStoredPreferences, filtersToSearchParams } from '../lib/filters';
+import { activeFilterCount, DEFAULT_FILTERS, deriveFacets, filterAndSortVehicles, filtersFromSearchParams, filtersFromStoredPreferences, filtersToSearchParams, groupModelYearResults } from '../lib/filters';
 import { loadCatalog } from '../services/catalog';
 import { requireSupabase } from '../services/supabase';
 import type { CatalogManifest, VehicleFilters, VehicleRecord } from '../types/vehicle';
@@ -81,10 +81,11 @@ export function CatalogPage() {
 
   const resetFilters = useCallback(() => setSearchParams(filtersToSearchParams(DEFAULT_FILTERS), { replace: true }), [setSearchParams]);
   const filtered = useMemo(() => filterAndSortVehicles(vehicles, filters), [vehicles, filters]);
+  const groups = useMemo(() => groupModelYearResults(filtered), [filtered]);
   const facets = useMemo(() => deriveFacets(vehicles, { makes: filters.makes, models: filters.models }), [vehicles, filters.makes, filters.models]);
-  const pageCount = Math.max(1, Math.ceil(filtered.length / filters.pageSize));
+  const pageCount = Math.max(1, Math.ceil(groups.length / filters.pageSize));
   const page = Math.min(filters.page, pageCount);
-  const pageItems = filtered.slice((page - 1) * filters.pageSize, page * filters.pageSize);
+  const pageItems = groups.slice((page - 1) * filters.pageSize, page * filters.pageSize);
   const suggestions = useMemo(
     () => [...facets.makes, ...facets.models, ...facets.trims].filter((value, index, all) => all.indexOf(value) === index),
     [facets],
@@ -107,7 +108,8 @@ export function CatalogPage() {
         <div className="container">
           <CatalogToolbar
             filters={filters}
-            total={filtered.length}
+            total={groups.length}
+            configurationCount={filtered.length}
             suggestions={suggestions}
             activeCount={activeFilterCount(filters)}
             onChange={updateFilters}
@@ -147,7 +149,9 @@ export function CatalogPage() {
               {!loading && !error && pageItems.length ? (
                 <>
                   <div className={filters.view === 'grid' ? 'vehicle-grid' : 'vehicle-list'}>
-                    {pageItems.map((vehicle) => <VehicleCard vehicle={vehicle} view={filters.view} key={vehicle.id} />)}
+                    {pageItems.map(({ key, configurations }) => (
+                      <VehicleCard key={`${filters.sort}:${key}`} vehicle={configurations[0]} configurations={configurations} view={filters.view} />
+                    ))}
                   </div>
                   <nav className="pagination" aria-label="Vehicle result pages">
                     <button type="button" onClick={() => goToPage(page - 1)} disabled={page <= 1}><ArrowLeft aria-hidden="true" /> Previous</button>

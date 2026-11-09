@@ -1,4 +1,5 @@
 import { Bookmark, Check, Fuel, GitCompareArrows, Gauge, Heart, Route } from 'lucide-react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useCompare } from '../contexts/CompareContext';
@@ -8,7 +9,26 @@ import { formatCurrency, formatNumber, joinDefined, titleCase } from '../lib/for
 import type { VehicleRecord } from '../types/vehicle';
 import { VehicleArtwork } from './VehicleArtwork';
 
-export function VehicleCard({ vehicle, view = 'grid' }: { vehicle: VehicleRecord; view?: 'grid' | 'list' }) {
+function configurationLabel(vehicle: VehicleRecord, referenceModel: string) {
+  const { specs } = vehicle;
+  return joinDefined([
+    vehicle.model !== referenceModel ? vehicle.model : null,
+    vehicle.trim || vehicle.variantLabel,
+    specs?.engine,
+    vehicle.sourceDetails?.transmissionRaw || specs?.transmission,
+    specs?.drivetrain,
+    specs?.mpgCombined != null ? `${specs.mpgCombined} ${specs.efficiencyUnit || vehicle.sourceDetails?.efficiencyUnit || 'MPG'}` : null,
+    specs?.horsepower != null ? `${specs.horsepower} hp` : null,
+  ]) || 'Configuration details unavailable';
+}
+
+export function VehicleCard({ vehicle: firstVehicle, view = 'grid', configurations }: {
+  vehicle: VehicleRecord;
+  view?: 'grid' | 'list';
+  configurations?: VehicleRecord[];
+}) {
+  const [selectedId, setSelectedId] = useState<string>();
+  const vehicle = configurations?.find((record) => record.id === selectedId) ?? firstVehicle;
   const { user } = useAuth();
   const { isSaved, save, remove } = useSavedCars();
   const compare = useCompare();
@@ -42,16 +62,24 @@ export function VehicleCard({ vehicle, view = 'grid' }: { vehicle: VehicleRecord
 
   return (
     <article className={`vehicle-card ${view === 'list' ? 'vehicle-card-list' : ''}`}>
-      <Link to={detailHref} className="card-art-link" aria-label={`View ${vehicle.year} ${vehicle.make} ${vehicle.model}`}>
-        <VehicleArtwork vehicle={vehicle} />
-      </Link>
+      <VehicleArtwork vehicle={vehicle} linkTo={detailHref} />
       <div className="vehicle-card-content">
         <div className="card-eyebrow">
           <span>{vehicle.year}</span>
           <span>{vehicle.bodyStyle || vehicle.category || 'Body type unavailable'}</span>
+          {vehicle.generation?.name ? <span className="card-generation">{vehicle.generation.name}</span> : null}
         </div>
         <Link to={detailHref} className="vehicle-title-link"><h3>{vehicle.make} {vehicle.model}</h3></Link>
-        <p className="vehicle-variant">{vehicle.trim || vehicle.variantLabel || 'Configuration varies by source record'}</p>
+        {configurations && configurations.length > 1 ? (
+          <label className="vehicle-configuration-picker">
+            <span>{configurations.length} matching configurations</span>
+            <select aria-label={`${configurations.length} matching configurations for ${firstVehicle.year} ${firstVehicle.make} ${firstVehicle.model}`} value={vehicle.id} onChange={(event) => setSelectedId(event.target.value)}>
+              {configurations.map((record, index) => (
+                <option key={record.id} value={record.id}>{index + 1}. {configurationLabel(record, firstVehicle.model)}</option>
+              ))}
+            </select>
+          </label>
+        ) : <p className="vehicle-variant">{vehicle.trim || vehicle.variantLabel || vehicle.specs?.engine || 'Configuration details unavailable'}</p>}
         <div className="price-block">
           <strong>{formatCurrency(vehicle.price?.average)}</strong>
           <span>{vehicle.price ? `Avg asking · ${formatNumber(vehicle.price.sampleSize)} listings` : 'No supported market-price record'}</span>

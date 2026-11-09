@@ -21,8 +21,34 @@ the current search.
 
 EPA rows are tested configurations. Several rows for one make/model/year are
 expected when engines, transmissions, drivetrains, or fuels differ. The pipeline
-does not collapse those legitimate variants. EPA does not provide authoritative
-marketing trims or horsepower, and RoadFit does not infer them.
+keeps those variants under stable IDs. The search interface groups matching
+configurations in one model-year card and lets users choose the exact record.
+FuelEconomy.gov often omits marketing trims and does not carry horsepower.
+
+### Rated horsepower, body specifications, and generations
+
+The [EPA Fuel Economy Test Car List](https://www.epa.gov/compliance-and-fuel-economy-data/data-cars-used-testing-fuel-economy)
+provides engine ratings. RoadFit joins by make, model year, model, cylinders,
+displacement, transmission, drivetrain, and fuel. The join requires agreeing
+ratings and a unique guide engine signature. Hybrid and electric system power
+requires separate evidence. Selected OEM technical documents support exact
+ratings for additional EPA configurations.
+
+The [NHTSA SaferCar dataset](https://www.nhtsa.gov/nhtsa-datasets-and-apis#safercar-data)
+provides reported seat counts and door information. Compatible year, model,
+body, and drivetrain entries must agree before a single value is added. Vehicle
+records retain links to these sources. The [generation rules](../pipeline/vehicle-generations.json)
+record U.S. year ranges and manufacturer citations, including Corvette C4–C8.
+
+The weekly catalog build uses checked-in enrichment snapshots. To refresh them
+deliberately before rebuilding, run these commands from the repository root.
+
+```bash
+python scripts/data/epa_horsepower.py
+python scripts/data/generation_specs.py --refresh-ncap
+python scripts/data/build_catalog.py
+python scripts/data/validate_catalog.py
+```
 
 ### NHTSA vPIC
 

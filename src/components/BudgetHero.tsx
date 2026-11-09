@@ -18,10 +18,10 @@ function parseMoney(value: string): number | null {
 }
 
 export function BudgetHero({ filters, onSubmit, catalogTotal, pricedRecords }: BudgetHeroProps) {
-  const [maxBudget, setMaxBudget] = useState(String(filters.maxPrice ?? 25000));
+  const [maxBudget, setMaxBudget] = useState(filters.maxPrice === null ? '' : String(filters.maxPrice));
   const [minBudget, setMinBudget] = useState(filters.minPrice === null ? '' : String(filters.minPrice));
 
-  useEffect(() => setMaxBudget(String(filters.maxPrice ?? 25000)), [filters.maxPrice]);
+  useEffect(() => setMaxBudget(filters.maxPrice === null ? '' : String(filters.maxPrice)), [filters.maxPrice]);
   useEffect(() => setMinBudget(filters.minPrice === null ? '' : String(filters.minPrice)), [filters.minPrice]);
 
   const maxValue = parseMoney(maxBudget) ?? 0;
@@ -43,7 +43,7 @@ export function BudgetHero({ filters, onSubmit, catalogTotal, pricedRecords }: B
             <div className="budget-heading">
               <div>
                 <span className="field-label">Your maximum budget</span>
-                <strong>{formatCurrency(maxValue)}</strong>
+                <strong>{maxBudget ? formatCurrency(maxValue) : 'Any budget'}</strong>
               </div>
               <BadgeDollarSign aria-hidden="true" />
             </div>
@@ -73,8 +73,8 @@ export function BudgetHero({ filters, onSubmit, catalogTotal, pricedRecords }: B
           <p className="hero-note"><ShieldCheck aria-hidden="true" /> No made-up prices. Missing market data is always labeled.</p>
         </div>
         <div className="hero-stats" aria-label="Catalog highlights">
-          <div><Database aria-hidden="true" /><strong>{catalogTotal?.toLocaleString() ?? '50k+'}</strong><span>vehicle configurations</span></div>
-          <div><SlidersHorizontal aria-hidden="true" /><strong>{pricedRecords?.toLocaleString() ?? '7k+'}</strong><span>model-years with price data</span></div>
+          <div><Database aria-hidden="true" /><strong>{catalogTotal?.toLocaleString() ?? '—'}</strong><span>vehicle configurations</span></div>
+          <div><SlidersHorizontal aria-hidden="true" /><strong>{pricedRecords?.toLocaleString() ?? '—'}</strong><span>configurations with asking prices</span></div>
         </div>
       </div>
     </section>

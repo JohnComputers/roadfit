@@ -78,6 +78,23 @@ def validate_catalog(output_dir: Path = PUBLIC_DATA_DIR) -> dict[str, Any]:
             specs = record.get("specs")
             if not isinstance(specs, dict) or not SPEC_KEYS.issubset(specs):
                 errors.append(f"{label}: incomplete specs object")
+            else:
+                for field, maximum in (("horsepower", 2500), ("doors", 8), ("seats", 30)):
+                    value = specs[field]
+                    if value is not None:
+                        if type(value) is not int or not 1 <= value <= maximum:
+                            errors.append(f"{label}: invalid {field}")
+                        else:
+                            counts[field] += 1
+            generation = record.get("generation")
+            if generation:
+                start, end = generation.get("startYear"), generation.get("endYear")
+                if (type(start) is not int or type(end) is not int or type(record.get("year")) is not int
+                        or not start <= record["year"] <= end or not generation.get("name")
+                        or not str(generation.get("sourceUrl", "")).startswith("https://")):
+                    errors.append(f"{label}: invalid generation range or source")
+                else:
+                    counts["generation"] += 1
             provenance = record.get("provenance")
             if not isinstance(provenance, list) or not provenance:
                 errors.append(f"{label}: provenance missing")
@@ -121,6 +138,9 @@ def validate_catalog(output_dir: Path = PUBLIC_DATA_DIR) -> dict[str, Any]:
 
     if actual_total != manifest.get("total"):
         errors.append(f"manifest total mismatch: manifest={manifest.get('total')} actual={actual_total}")
+    spec_coverage = {field: counts[field] for field in ("horsepower", "doors", "seats", "generation")}
+    if "specCoverage" in manifest and manifest["specCoverage"] != spec_coverage:
+        errors.append("specification coverage does not match manifest")
     index_relative = str(manifest.get("idIndexUrl") or "")
     index_relative = index_relative[5:] if index_relative.startswith("data/") else index_relative
     index_path = output_dir / index_relative
@@ -151,6 +171,7 @@ def validate_catalog(output_dir: Path = PUBLIC_DATA_DIR) -> dict[str, Any]:
     report = {
         "ok": not errors, "total": actual_total, "uniqueIds": len(seen_ids),
         "priced": counts["priced"], "unpriced": counts["unpriced"],
+        "specCoverage": spec_coverage,
         "shards": len(manifest.get("shards", [])), "errors": errors,
         "warnings": warnings[:100], "warningCount": len(warnings),
     }

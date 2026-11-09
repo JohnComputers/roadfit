@@ -1,11 +1,17 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": "63c13fad989da0ad",
-  "generatedAt": "2026-11-09T01:59:29Z",
+  "catalogVersion": "178d89d0eb4f686e",
+  "generatedAt": "2026-11-09T22:18:46Z",
   "total": 49704,
   "priced": 15279,
   "priceUnavailable": 34425,
   "priceCoveragePercent": 30.74,
+  "specCoverage": {
+    "horsepower": 6915,
+    "doors": 11467,
+    "seats": 8390,
+    "generation": 3106
+  },
   "makes": 146,
   "models": 5820,
   "years": {

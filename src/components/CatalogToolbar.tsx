@@ -10,6 +10,7 @@ import type { SortKey, VehicleFilters } from '../types/vehicle';
 interface CatalogToolbarProps {
   filters: VehicleFilters;
   total: number;
+  configurationCount: number;
   suggestions: string[];
   activeCount: number;
   onChange: (changes: Partial<VehicleFilters>) => void;
@@ -29,7 +30,7 @@ const SORT_OPTIONS: Array<[SortKey, string]> = [
   ['sample-desc', 'Largest price sample'],
 ];
 
-export function CatalogToolbar({ filters, total, suggestions, activeCount, onChange, onOpenFilters }: CatalogToolbarProps) {
+export function CatalogToolbar({ filters, total, configurationCount, suggestions, activeCount, onChange, onOpenFilters }: CatalogToolbarProps) {
   const [query, setQuery] = useState(filters.query);
   const [copied, setCopied] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
@@ -95,8 +96,9 @@ export function CatalogToolbar({ filters, total, suggestions, activeCount, onCha
       <div className="results-heading-row">
         <div>
           <p className="section-kicker">Your road-ready shortlist</p>
-          <h2 aria-live="polite">{total.toLocaleString()} matching {total === 1 ? 'vehicle' : 'vehicles'}</h2>
+          <h2 aria-live="polite">{total.toLocaleString()} matching {total === 1 ? 'model year' : 'model years'}</h2>
           <p>{filters.maxPrice !== null ? `At or below ${formatCurrency(filters.maxPrice)} average asking price` : 'Across all supported price points'}</p>
+          {configurationCount > total ? <p>{configurationCount.toLocaleString()} matching configurations grouped by make, model, and year</p> : null}
         </div>
         <div className="toolbar-actions-top">
           <button className="secondary-button mobile-filter-button" type="button" onClick={onOpenFilters}>

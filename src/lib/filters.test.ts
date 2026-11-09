@@ -7,11 +7,12 @@ import {
   filtersFromSearchParams,
   filtersFromStoredPreferences,
   filtersToSearchParams,
+  groupModelYearResults,
   sortVehicles,
   vehicleMatchesFilters,
 } from './filters';
 import { vehicles } from '../test/fixtures/vehicles';
-import type { VehicleFilters } from '../types/vehicle';
+import type { VehicleFilters, VehicleRecord } from '../types/vehicle';
 
 function filters(overrides: Partial<VehicleFilters> = {}): VehicleFilters {
   return {
@@ -54,6 +55,15 @@ describe('vehicle filter combinations', () => {
     expect(vehicleMatchesFilters(vehicles[3]!, filters({ query: '2022 NISSAN' , maxPrice: null, priceAvailable: null }))).toBe(true);
   });
 
+  it('supports searching by model and sourced generation name together', () => {
+    const corvette: VehicleRecord = {
+      ...vehicles[0]!, make: 'Chevrolet', model: 'Corvette', year: 1990,
+      generation: { name: 'C4', startYear: 1984, endYear: 1996, sourceUrl: 'https://example.test/corvette' },
+    };
+    expect(vehicleMatchesFilters(corvette, filters({ query: 'Corvette c4' }))).toBe(true);
+    expect(vehicleMatchesFilters(corvette, filters({ query: 'Corvette c5' }))).toBe(false);
+  });
+
   it('treats unsupported specifications as missing instead of inventing values', () => {
     expect(vehicleMatchesFilters(vehicles[3]!, filters({ minHorsepower: 100, maxPrice: null, priceAvailable: null }))).toBe(false);
     expect(vehicleMatchesFilters(vehicles[3]!, filters({ minSeats: 5, maxPrice: null, priceAvailable: null }))).toBe(true);
@@ -74,9 +84,19 @@ describe('vehicle filter combinations', () => {
   });
 });
 describe('sorting', () => {
-  it('puts missing prices last for ascending price', () => {
-    const result = sortVehicles(vehicles, 'price-asc', filters({ minPrice: null, maxPrice: null, priceAvailable: null }));
-    expect(result.map((vehicle) => vehicle.id)).toEqual(['epa-100003', 'epa-100002', 'epa-100001', 'epa-100004']);
+  it('puts missing prices last in either direction', () => {
+    const selected = filters({ minPrice: null, maxPrice: null, priceAvailable: null });
+    const ascending = sortVehicles(vehicles, 'price-asc', selected);
+    const descending = sortVehicles(vehicles, 'price-desc', selected);
+    expect(ascending.map((vehicle) => vehicle.id)).toEqual(['epa-100003', 'epa-100002', 'epa-100001', 'epa-100004']);
+    expect(descending.map((vehicle) => vehicle.id)).toEqual(['epa-100001', 'epa-100002', 'epa-100003', 'epa-100004']);
+  });
+
+  it('ranks populated horsepower ahead of newer null or non-finite values', () => {
+    const missing: VehicleRecord = { ...vehicles[0]!, id: 'hp-missing', year: 2025, specs: { horsepower: null } };
+    const invalid: VehicleRecord = { ...vehicles[0]!, id: 'hp-invalid', year: 2026, specs: { horsepower: NaN } };
+    const ranked = sortVehicles([missing, ...vehicles, invalid], 'horsepower-desc', filters());
+    expect(ranked.map((vehicle) => vehicle.id)).toEqual(['epa-100001', 'epa-100003', 'epa-100002', 'hp-invalid', 'hp-missing', 'epa-100004']);
   });
 
   it('sorts efficiency using populated combined values', () => {
@@ -94,7 +114,31 @@ describe('sorting', () => {
   });
 });
 
+describe('grouped model-year results', () => {
+  const rwd: VehicleRecord = { ...vehicles[0]!, id: 'f150-2wd', model: 'F150 Pickup 2WD FFV', bodyStyle: 'Pickup', specs: { drivetrain: 'RWD', horsepower: 290 } };
+  const awd: VehicleRecord = { ...rwd, id: 'f150-4wd', model: 'F-150 Pickup 4WD', specs: { drivetrain: '4WD', horsepower: 400 } };
+  const raptor: VehicleRecord = { ...awd, id: 'f150-raptor', model: 'F-150 Raptor 4WD', specs: { drivetrain: '4WD', horsepower: 450 } };
+  const nextYear: VehicleRecord = { ...rwd, id: 'f150-next-year', year: rwd.year + 1 };
+
+  it('groups drive variants by model year and ranks using the best matching configuration', () => {
+    const sorted = filterAndSortVehicles([rwd, awd, raptor, nextYear], filters({ sort: 'horsepower-desc' }));
+    const groupedIds = groupModelYearResults(sorted).map(({ configurations }) => configurations.map(({ id }) => id));
+    expect(groupedIds).toEqual([['f150-raptor'], ['f150-4wd', 'f150-2wd'], ['f150-next-year']]);
+  });
+
+  it('retains only configurations that independently satisfy the filters', () => {
+    const sorted = filterAndSortVehicles([rwd, awd, raptor], filters({ sort: 'horsepower-desc', drivetrains: ['RWD'] }));
+    expect(groupModelYearResults(sorted).map(({ configurations }) => configurations.map(({ id }) => id))).toEqual([['f150-2wd']]);
+  });
+});
+
 describe('shareable filter URLs', () => {
+  it('keeps the budget uncapped when browsing all price records', () => {
+    const uncapped = filters({ maxPrice: null, priceAvailable: null });
+    expect(filtersFromSearchParams(filtersToSearchParams(uncapped))).toMatchObject(uncapped);
+    expect(filtersFromSearchParams(new URLSearchParams()).maxPrice).toBe(DEFAULT_FILTERS.maxPrice);
+  });
+
   it('round-trips combined persistent filters', () => {
     const original = filters({
       query: 'plug in',

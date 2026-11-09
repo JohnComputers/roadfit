@@ -15,6 +15,7 @@
     "test:coverage": "vitest run --coverage",
     "data:refresh": "python scripts/data/refresh.py",
     "data:validate": "python scripts/data/validate_catalog.py",
+    "data:photos": "python scripts/data/build_vehicle_photos.py",
     "check": "npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
