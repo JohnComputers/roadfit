@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "63c13fad989da0ad",
+  "generatedAt": "2026-11-09T01:59:29Z",
+  "total": 49704,
+  "priced": 15279,
+  "priceUnavailable": 34425,
+  "priceCoveragePercent": 30.74,
+  "makes": 146,
+  "models": 5820,
+  "years": {
+    "min": 1984,
+    "max": 2027,
+    "count": 44
+  },
+  "sourceRows": {
+    "epa": 50647,
+    "forcar": 7421
+  },
+  "normalization": {
+    "epaDuplicateConfigurationsRemoved": 943,
+    "epaInvalidRowsRemoved": 0,
+    "vpicMakeModelMatchedRecords": 13496,
+    "priceJoinRules": {
+      "exact-normalized": 6198,
+      "explicit-descriptor-stripped": 9081
+    },
+    "forcar": {
+      "rows": 7421,
+      "validRows": 7421,
+      "duplicateRows": 0
+    }
+  }
+}

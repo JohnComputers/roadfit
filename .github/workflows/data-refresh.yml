@@ -1,0 +1,65 @@
+name: Refresh vehicle catalog
+
+on:
+  schedule:
+    # Weekly, outside common API peak hours. Manual runs are also supported.
+    - cron: "17 6 * * 0"
+  workflow_dispatch:
+    inputs:
+      skip_vpic_models:
+        description: "Skip the optional per-make vPIC name corroboration"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: vehicle-data-refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Use Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore source download cache
+        uses: actions/cache@v4
+        with:
+          path: pipeline/cache
+          key: vehicle-source-cache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            vehicle-source-cache-${{ runner.os }}-
+
+      - name: Download, normalize, shard, and validate
+        shell: bash
+        run: |
+          args=()
+          if [[ "${{ inputs.skip_vpic_models || 'false' }}" == "true" ]]; then
+            args+=(--skip-vpic-models)
+          fi
+          python scripts/data/refresh.py "${args[@]}"
+
+      - name: Commit a validated catalog change
+        shell: bash
+        run: |
+          git add public/data
+          if git diff --cached --quiet; then
+            echo "Catalog is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: refresh vehicle catalog"
+          git push origin HEAD:main

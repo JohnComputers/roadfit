@@ -1,0 +1,30 @@
+{
+  "makeAliases": {
+    "AM General": ["A M General"],
+    "Alfa Romeo": ["Alfa-Romeo"],
+    "BMW": ["B M W"],
+    "GMC": ["G M C"],
+    "Mercedes-Benz": ["Mercedes Benz", "Mercedes"],
+    "MINI": ["Mini"],
+    "Ram": ["RAM"],
+    "Rolls-Royce": ["Rolls Royce"],
+    "smart": ["Smart"]
+  },
+  "modelAliases": {
+    "Ford": {
+      "F150": ["F-150", "F 150"],
+      "F250": ["F-250", "F 250"],
+      "F350": ["F-350", "F 350"]
+    },
+    "Chevrolet": {
+      "C/K 10": ["C10", "C-10"],
+      "C/K 20": ["C20", "C-20"]
+    },
+    "Mercedes-Benz": {
+      "SL-Class": ["SL Class"],
+      "E-Class": ["E Class"],
+      "C-Class": ["C Class"],
+      "S-Class": ["S Class"]
+    }
+  }
+}

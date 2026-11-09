@@ -1,0 +1,30 @@
+{
+  "generatedAt": "2026-11-09T01:59:29Z",
+  "sources": [
+    {
+      "name": "EPA/DOE FuelEconomy.gov",
+      "url": "https://www.fueleconomy.gov/feg/download.shtml",
+      "retrievedAt": "2026-11-08T19:39:49Z",
+      "license": "U.S. federal government public data"
+    },
+    {
+      "name": "NHTSA vPIC",
+      "url": "https://vpic.nhtsa.dot.gov/api/",
+      "retrievedAt": "2026-11-08T19:39:51Z",
+      "license": "U.S. federal government open data"
+    },
+    {
+      "name": "ForCar",
+      "url": "https://forcar.org/open-data/",
+      "retrievedAt": "2026-11-08T19:39:50Z",
+      "license": "CC BY 4.0",
+      "priceMethodology": "Aggregated asking prices by make/model/model year; not completed sales or verified live inventory."
+    }
+  ],
+  "limitations": [
+    "ForCar prices are model-year asking-price aggregates, not completed-sale prices or live listings.",
+    "EPA records represent tested configurations and do not supply authoritative trim names, horsepower, doors, or seating.",
+    "Missing prices and specifications remain null; RoadFit does not fabricate estimates.",
+    "Images, when added separately, must not be assumed to depict an exact trim unless explicitly verified."
+  ]
+}

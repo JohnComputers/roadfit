@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="RoadFit">
+  <rect width="64" height="64" rx="16" fill="#0b0e13"/>
+  <path d="M14 39c4-13 14-21 32-22-4 4-7 9-9 14 5 0 9 1 13 4-9-1-17 2-24 10l-12-6Z" fill="#ffb54a"/>
+  <circle cx="22" cy="45" r="4" fill="#f7f8fa"/><circle cx="44" cy="43" r="4" fill="#f7f8fa"/>
+</svg>

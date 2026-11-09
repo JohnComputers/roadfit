@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "63c13fad989da0ad",
+  "generatedAt": "2026-11-09T01:59:29Z",
+  "total": 49704,
+  "pricedCount": 15279,
+  "unpricedCount": 34425,
+  "shards": [
+    {
+      "id": "year-1984-1989_price-unavailable",
+      "url": "data/catalog/year-1984-1989_price-unavailable.json",
+      "count": 7765,
+      "minYear": 1984,
+      "maxYear": 1989,
+      "minPrice": null,
+      "maxPrice": null,
+      "bytes": 7353744,
+      "sha256": "c1b22ed131a82e32c8146b79241df7ae4906884291b4c9085a96704b19c14708"
+    },
+    {
+      "id": "year-1990-1999_price-000000-009999",
+      "url": "data/catalog/year-1990-1999_price-000000-009999.json",
+      "count": 1449,
+      "minYear": 1990,
+      "maxYear": 1999,
+      "minPrice": 1849,
+      "maxPrice": 9992,
+      "bytes": 2109570,
+      "sha256": "d848601b439446cb8346721ccac69bffed3d14d6a4a00c278f055729d9467db6"
+    },
+    {
+      "id": "year-1990-1999_price-010000-024999",
+      "url": "data/catalog/year-1990-1999_price-010000-024999.json",
+      "count": 217,
+      "minYear": 1990,
+      "maxYear": 1999,
+      "minPrice": 10022,
+      "maxPrice": 23053,
+      "bytes": 324429,
+      "sha256": "33044333383d0b02556f5c979950a49d3482271dca0acaa040afb4d1b1ca1e5b"
+    },
+    {
+      "id": "year-1990-1999_price-025000-049999",
+      "url": "data/catalog/year-1990-1999_price-025000-049999.json",
+      "count": 3,
+      "minYear": 1995,
+      "maxYear": 1995,
+      "minPrice": 26314,
+      "maxPrice": 29366,
+      "bytes": 4613,
+      "sha256": "51b1fca5d22770ab9cef290cdeb4aed59039c03571eaf0a92c76940fbb885d93"
+    },
+    {
+      "id": "year-1990-1999_price-050000-099999",
+      "url": "data/catalog/year-1990-1999_price-050000-099999.json",
+      "count": 2,
+      "minYear": 1992,
+      "maxYear": 1992,
+      "minPrice": 62000,
+      "maxPrice": 62000,
+      "bytes": 3048,
+      "sha256": "db1f9a21c9a651c2c931a5555d6169ddef917d9b1ca37eb58cdc92f36d84eb23"
+    },
+    {
+      "id": "year-1990-1999_price-unavailable",
+      "url": "data/catalog/year-1990-1999_price-unavailable.json",
+      "count": 7765,
+      "minYear": 1990,
+      "maxYear": 1999,
+      "minPrice": null,
+      "maxPrice": null,
+      "bytes": 7433116,
+      "sha256": "d84f08a27a606e2fb6f10e8d09b776a28bdbf6f3feaa5f94a56a31f44c589404"
+    },
+    {
+      "id": "year-2000-2009_price-000000-009999",
+      "url": "data/catalog/year-2000-2009_price-000000-009999.json",
+      "count": 4479,
+      "minYear": 2000,
+      "maxYear": 2009,
+      "minPrice": 1643,
+      "maxPrice": 9987,
+      "bytes": 6602422,
+      "sha256": "2eb0cf1c0b9851b538df77cd1a661ea58392d0e19072524514540d35cf301b8c"
+    },
+    {
+      "id": "year-2000-2009_price-010000-024999",
+      "url": "data/catalog/year-2000-2009_price-010000-024999.json",
+      "count": 341,
+      "minYear": 2000,
+      "maxYear": 2009,
+      "minPrice": 10062,
+      "maxPrice": 23423,
+      "bytes": 505288,
+      "sha256": "c8db73e4044020f3cacc71f6e2889e7ddd420d41c7e482f66e15cf474ddd6a01"
+    },
+    {
+      "id": "year-2000-2009_price-025000-049999",
+      "url": "data/catalog/year-2000-2009_price-025000-049999.json",
+      "count": 63,
+      "minYear": 2000,
+      "maxYear": 2009,
+      "minPrice": 25030,
+      "maxPrice": 49771,
+      "bytes": 94067,
+      "sha256": "2b6bca779996a3532eac0b89e9b0e2fbb782a17ec6a9893abb39ad982e0afa95"
+    },
+    {
+      "id": "year-2000-2009_price-050000-099999",
+      "url": "data/catalog/year-2000-2009_price-050000-099999.json",
+      "count": 4,
+      "minYear": 2000,
+      "maxYear": 2009,
+      "minPrice": 62378,
+      "maxPrice": 88896,
+      "bytes": 5763,
+      "sha256": "af402fb8502d263d34e2502abcf94516ece3c323beb09bb6fddb547c2b4aafef"
+    },
+    {
+      "id": "year-2000-2009_price-unavailable",
+      "url": "data/catalog/year-2000-2009_price-unavailable.json",
+      "count": 5710,
+      "minYear": 2000,
+      "maxYear": 2009,
+      "minPrice": null,
+      "maxPrice": null,
+      "bytes": 5314098,
+      "sha256": "bb3a2d4243e463c83caad25bf13758747c8012c331cf168cac4be0c295e861e5"
+    },
+    {
+      "id": "year-2010-2019_price-000000-009999",
+      "url": "data/catalog/year-2010-2019_price-000000-009999.json",
+      "count": 3292,
+      "minYear": 2010,
+      "maxYear": 2019,
+      "minPrice": 2708,
+      "maxPrice": 9997,
+      "bytes": 4859673,
+      "sha256": "b99d228a20134d406a0e105530fd61172f617ccba764dd45cf1cddc05f7109a9"
+    },
+    {
+      "id": "year-2010-2019_price-010000-024999",
+      "url": "data/catalog/year-2010-2019_price-010000-024999.json",
+      "count": 2317,
+      "minYear": 2010,
+      "maxYear": 2019,
+      "minPrice": 10001,
+      "maxPrice": 24930,
+      "bytes": 3400972,
+      "sha256": "d29a2e294ca70fe58d284780ea489fe8749f8c891de196fe28280ab36a281d0e"
+    },
+    {
+      "id": "year-2010-2019_price-025000-049999",
+      "url": "data/catalog/year-2010-2019_price-025000-049999.json",
+      "count": 240,
+      "minYear": 2010,
+      "maxYear": 2019,
+      "minPrice": 25080,
+      "maxPrice": 49997,
+      "bytes": 355639,
+      "sha256": "39edbdacd37d13f41208293811bbd4628e1050673a1131b7758c93aa52616da9"
+    },
+    {
+      "id": "year-2010-2019_price-050000-099999",
+      "url": "data/catalog/year-2010-2019_price-050000-099999.json",
+      "count": 36,
+      "minYear": 2011,
+      "maxYear": 2019,
+      "minPrice": 51513,
+      "maxPrice": 97978,
+      "bytes": 55168,
+      "sha256": "0cb014f69295ff97c5f6aa9824b559314846c8179443df79436817c323cee12a"
+    },
+    {
+      "id": "year-2010-2019_price-100000-249999",
+      "url": "data/catalog/year-2010-2019_price-100000-249999.json",
+      "count": 4,
+      "minYear": 2014,
+      "maxYear": 2019,
+      "minPrice": 109124,
+      "maxPrice": 170566,
+      "bytes": 5924,
+      "sha256": "8033fc91c52d7d9757f6eeb856da992a89d6d7994e94a008a92197aa1b6ea218"
+    },
+    {
+      "id": "year-2010-2019_price-unavailable",
+      "url": "data/catalog/year-2010-2019_price-unavailable.json",
+      "count": 6405,
+      "minYear": 2010,
+      "maxYear": 2019,
+      "minPrice": null,
+      "maxPrice": null,
+      "bytes": 5891474,
+      "sha256": "6adfdc1eb95c1ade5c8c0b5b2c5f8c00a8a68690ece54bbbb734e146cc117357"
+    },
+    {
+      "id": "year-2020-2029_price-000000-009999",
+      "url": "data/catalog/year-2020-2029_price-000000-009999.json",
+      "count": 25,
+      "minYear": 2020,
+      "maxYear": 2022,
+      "minPrice": 5779,
+      "maxPrice": 9987,
+      "bytes": 38639,
+      "sha256": "05b99977eb3a393e69b1186c6e5d6554ac19683a3bdfdaf5aac8ab6db9dc4719"
+    },
+    {
+      "id": "year-2020-2029_price-010000-024999",
+      "url": "data/catalog/year-2020-2029_price-010000-024999.json",
+      "count": 1133,
+      "minYear": 2020,
+      "maxYear": 2026,
+      "minPrice": 10189,
+      "maxPrice": 24975,
+      "bytes": 1660705,
+      "sha256": "f394fdbd6c162eb0bbfd3cecefe8676772b4c22020ce18824aefec57286a99e2"
+    },
+    {
+      "id": "year-2020-2029_price-025000-049999",
+      "url": "data/catalog/year-2020-2029_price-025000-049999.json",
+      "count": 1366,
+      "minYear": 2020,
+      "maxYear": 2027,
+      "minPrice": 25174,
+      "maxPrice": 49746,
+      "bytes": 1980336,
+      "sha256": "950ff77a00e164f34262c4d3b1a8e8b58f420ef5d0437ee17d364ca69053541f"
+    },
+    {
+      "id": "year-2020-2029_price-050000-099999",
+      "url": "data/catalog/year-2020-2029_price-050000-099999.json",
+      "count": 298,
+      "minYear": 2020,
+      "maxYear": 2027,
+      "minPrice": 50299,
+      "maxPrice": 98105,
+      "bytes": 431034,
+      "sha256": "2dd63025fcb53c67ef43e7d91130a8fbdff228f402bb944c9917474dcec38aeb"
+    },
+    {
+      "id": "year-2020-2029_price-100000-249999",
+      "url": "data/catalog/year-2020-2029_price-100000-249999.json",
+      "count": 10,
+      "minYear": 2020,
+      "maxYear": 2027,
+      "minPrice": 101340,
+      "maxPrice": 168810,
+      "bytes": 14923,
+      "sha256": "11c05fc11368abba65ad78878cbdcdff64462eee6f5d41180a16c9cdbbe8563e"
+    },
+    {
+      "id": "year-2020-2029_price-unavailable",
+      "url": "data/catalog/year-2020-2029_price-unavailable.json",
+      "count": 6780,
+      "minYear": 2020,
+      "maxYear": 2027,
+      "minPrice": null,
+      "maxPrice": null,
+      "bytes": 6271387,
+      "sha256": "6c3b34a48d7240025b5ae22a38f0b1a7dd0e14fd387e777fe9f037b7a3f50d78"
+    }
+  ],
+  "facetsUrl": "data/facets.json",
+  "statsUrl": "data/catalog-stats.json",
+  "idIndexUrl": "data/id-index.json",
+  "sources": [
+    {
+      "name": "EPA/DOE FuelEconomy.gov",
+      "url": "https://www.fueleconomy.gov/feg/download.shtml",
+      "retrievedAt": "2026-11-08T19:39:49Z",
+      "license": "U.S. federal government public data"
+    },
+    {
+      "name": "NHTSA vPIC",
+      "url": "https://vpic.nhtsa.dot.gov/api/",
+      "retrievedAt": "2026-11-08T19:39:51Z",
+      "license": "U.S. federal government open data"
+    },
+    {
+      "name": "ForCar",
+      "url": "https://forcar.org/open-data/",
+      "retrievedAt": "2026-11-08T19:39:50Z",
+      "license": "CC BY 4.0",
+      "priceMethodology": "Aggregated asking prices by make/model/model year; not completed sales or verified live inventory."
+    }
+  ]
+}

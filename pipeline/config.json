@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "sources": {
+    "epa": {
+      "url": "https://www.fueleconomy.gov/feg/epadata/vehicles.csv.zip",
+      "cacheFile": "epa/vehicles.csv.zip",
+      "license": "U.S. federal government public data",
+      "homepage": "https://www.fueleconomy.gov/feg/download.shtml"
+    },
+    "forcar": {
+      "url": "https://forcar.org/datasets/used-car-prices-by-model-year.csv",
+      "cacheFile": "forcar/used-car-prices-by-model-year.csv",
+      "license": "CC BY 4.0",
+      "homepage": "https://forcar.org/open-data/"
+    },
+    "vpic": {
+      "makesUrl": "https://vpic.nhtsa.dot.gov/api/vehicles/GetAllMakes?format=json",
+      "modelsForMakeUrl": "https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMake/{make}?format=json",
+      "license": "U.S. federal government open data",
+      "homepage": "https://vpic.nhtsa.dot.gov/api/"
+    }
+  },
+  "sharding": {
+    "yearBands": [[1984, 1989], [1990, 1999], [2000, 2009], [2010, 2019], [2020, 2029], [2030, 2099]],
+    "priceBands": [[0, 9999], [10000, 24999], [25000, 49999], [50000, 99999], [100000, 249999], [250000, null]]
+  },
+  "quality": {
+    "minimumRecords": 20000,
+    "minimumMakes": 50,
+    "minimumYears": 30
+  }
+}
