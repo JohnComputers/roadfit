@@ -18,6 +18,6 @@ additional_redirect_urls = ["http://localhost:5173/**"]
 enable_signup = true
 
 [auth.email]
-enable_signup = true
+enabled = true
 double_confirm_changes = true
 enable_confirmations = true

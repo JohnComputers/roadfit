@@ -4,26 +4,26 @@ create extension if not exists pgtap with schema extensions;
 select plan(17);
 
 select results_eq(
-  $$select policyname::text from pg_policies
+  $$select policyname::text collate "C" from pg_policies
     where schemaname = 'public' and tablename = 'profiles'
     order by policyname$$,
-  $$values ('profiles_insert_own'::text),
-           ('profiles_select_own'::text),
-           ('profiles_update_own'::text)$$,
+  $$values ('profiles_insert_own'::text collate "C"),
+           ('profiles_select_own'::text collate "C"),
+           ('profiles_update_own'::text collate "C")$$,
   'profiles exposes only explicit owner policies'
 );
 select results_eq(
-  $$select policyname::text from pg_policies
+  $$select policyname::text collate "C" from pg_policies
     where schemaname = 'public' and tablename = 'saved_vehicles'
     order by policyname$$,
-  $$values ('saved_vehicles_manage_own'::text)$$,
+  $$values ('saved_vehicles_manage_own'::text collate "C")$$,
   'saved vehicles has one owner policy'
 );
 select results_eq(
-  $$select policyname::text from pg_policies
+  $$select policyname::text collate "C" from pg_policies
     where schemaname = 'public' and tablename = 'collection_items'
     order by policyname$$,
-  $$values ('collection_items_manage_own'::text)$$,
+  $$values ('collection_items_manage_own'::text collate "C")$$,
   'collection membership has one owner policy'
 );
 
