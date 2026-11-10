@@ -76,6 +76,19 @@ def make_key(value: str) -> str:
     return MAKE_ALIASES.get(clean, clean)
 
 
+def indicated_drives(name: str) -> set[str]:
+    drives = set()
+    if re.search(r'\b(?:4wd|4x4|four wheel drive)\b', name):
+        drives.add('4WD')
+    if re.search(r'\b(?:awd|all wheel drive)\b', name):
+        drives.add('AWD')
+    if re.search(r'\b(?:fwd|2wd|4x2|front wheel drive)\b', name):
+        drives.add('FWD')
+    if re.search(r'\b(?:rwd|2wd|4x2|rear wheel drive)\b', name):
+        drives.add('RWD')
+    return drives
+
+
 def model_key(value: str) -> str:
     value = DRIVE.sub('', words(value))
     value = re.sub(r'\bpickup\b$', '', value.strip())
@@ -216,7 +229,8 @@ def photo_candidate(row: dict, pairs: set[tuple[str, str]]) -> dict | None:
             + 2 * bool(re.search(r'\b(?:left|right|quarter)\b', normalized))
             + 2 * ('rear' not in normalized and 'side profile' not in normalized)
             + min(width / 1200, 1.5) - abs(width / height - 1.65))
-    return dict(row=row, make=make, model=model, year=year, span=span, body=body, rank=rank, image_id=source_id)
+    return dict(row=row, make=make, model=model, year=year, span=span, body=body,
+                drives=indicated_drives(normalized), rank=rank, image_id=source_id)
 
 
 def target_body(vehicle: dict) -> str:
@@ -234,6 +248,12 @@ def target_body(vehicle: dict) -> str:
 
 
 def compatible(candidate: dict, vehicle: dict) -> bool:
+    drives = candidate.get('drives')
+    target_drive = (vehicle.get('specs') or {}).get('drivetrain')
+    raw = (vehicle.get('sourceDetails') or {}).get('drivetrainRaw')
+    target_drives = {'4WD', 'AWD'} if raw == '4-Wheel or All-Wheel Drive' else {target_drive} if target_drive else set()
+    if drives and target_drives and drives.isdisjoint(target_drives):
+        return False
     target = target_body(vehicle)
     body = candidate['body']
     if target and body:
@@ -244,6 +264,10 @@ def compatible(candidate: dict, vehicle: dict) -> bool:
 
 def load_choices(vehicles: list[dict], paths: list[Path], ranges_path: Path) -> dict[str, list[tuple[dict, str]]]:
     pairs = {(make_key(v['make']), model) for v in vehicles for model in (model_key(v['model']), model_family(v['model'])) if model}
+    family_bodies = defaultdict(set)
+    for vehicle in vehicles:
+        family = (make_key(vehicle['make']), model_family(vehicle['model']), vehicle['year'])
+        family_bodies[family].add(target_body(vehicle))
     by_pair = defaultdict(lambda: defaultdict(list))
     spans_by_pair = defaultdict(list)
     for path in paths:
@@ -252,6 +276,11 @@ def load_choices(vehicles: list[dict], paths: list[Path], ranges_path: Path) -> 
                 item = photo_candidate(row, pairs)
                 if item:
                     pair = item['make'], item['model']
+                    # A stock model-year with a single sourced catalog body can
+                    # use a matching photo whose filename omits the body word.
+                    bodies = family_bodies[(*pair, item['year'])]
+                    if not item['body'] and len(bodies) == 1:
+                        item['body'] = next(iter(bodies))
                     if item['span']:
                         spans_by_pair[pair].append(item)
                     else:

@@ -38,3 +38,10 @@ class VehiclePhotosTest(unittest.TestCase):
         self.assertFalse(compatible({'body': 'coupe'}, record))
         self.assertFalse(compatible({'body': ''}, record))
         self.assertTrue(compatible({'body': 'convertible'}, record))
+
+    def test_explicit_photo_drive_cannot_contradict_the_vehicle(self):
+        photo = photo_candidate(commons_photo('2020 Ford F-150 XL 4x4, front.jpg'), {('ford', 'f150')})
+        vehicle = {'make': 'Ford', 'model': 'F150 Pickup', 'bodyStyle': 'Pickup', 'specs': {'drivetrain': 'RWD'}}
+        self.assertFalse(compatible(photo, vehicle))
+        vehicle['specs']['drivetrain'] = '4WD'
+        self.assertTrue(compatible(photo, vehicle))

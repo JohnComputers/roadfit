@@ -14,7 +14,8 @@ catalog. For CarImages entries, the archive classification and Commons filename
 must agree. For targeted Commons results, the title and description must both
 identify the vehicle. Rules screen out ambiguous market names and known
 non-exterior subjects such as interiors, illustrations, replicas, and details.
-The importer uses body style when available and prefers exterior front views.
+The importer uses body style when available, checks explicitly named drivetrains
+against known vehicle drivetrains, and prefers exterior front views.
 
 - **Model year photo** means the photo metadata matches the model year and
   model. Trim and regional details can vary.

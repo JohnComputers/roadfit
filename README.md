@@ -17,7 +17,7 @@ The current generated catalog contains:
 - **13,496** records with a make/model name match in NHTSA vPIC
 - Sourced horsepower on **15,251** configurations, doors on **11,555**, seats on
   **8,534**, and generation labels on **3,106**
-- **1,188** licensed cover photos across **4,120** configurations
+- **1,280** licensed cover photos across **4,025** configurations
 - EPA fuel-cost estimates on **49,659** configurations, with tailpipe CO₂ and
   plug-in range and charging data where applicable
 - 23 year-and-price shards, loaded only when a search needs them
