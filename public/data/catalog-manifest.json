@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": "178d89d0eb4f686e",
-  "generatedAt": "2026-11-09T22:18:46Z",
+  "catalogVersion": "485420c380ecd524",
+  "generatedAt": "2026-11-10T01:01:38Z",
   "total": 49704,
   "pricedCount": 15279,
   "unpricedCount": 34425,
@@ -14,8 +14,8 @@
       "maxYear": 1989,
       "minPrice": null,
       "maxPrice": null,
-      "bytes": 7399809,
-      "sha256": "c27dee008533cca6f61516f2ea8df6171f49b7772097292087773e608f3c4d5f"
+      "bytes": 8402069,
+      "sha256": "11a9cd9434e6e235108c4123d24973d43d7260eda9c2e322b203ddc9d880d201"
     },
     {
       "id": "year-1990-1999_price-000000-009999",
@@ -25,8 +25,8 @@
       "maxYear": 1999,
       "minPrice": 1849,
       "maxPrice": 9992,
-      "bytes": 2261605,
-      "sha256": "17cc81d02f61bd70a1f002c6a914702908dd652260e76a2087f090d502b92282"
+      "bytes": 2497900,
+      "sha256": "67ef63e303d0ef6b4318ed635b6d4ce4455971cfaec2f2e6c8a0fb3d4174f88d"
     },
     {
       "id": "year-1990-1999_price-010000-024999",
@@ -36,8 +36,8 @@
       "maxYear": 1999,
       "minPrice": 10022,
       "maxPrice": 23053,
-      "bytes": 347885,
-      "sha256": "3382f5c9534700a5954b344e4a03cece7fe77256e334b912cb529a5b4340e298"
+      "bytes": 386465,
+      "sha256": "694a682fdf31836eb799f47fae50c3768f1cbba26024089262473550ce433a9d"
     },
     {
       "id": "year-1990-1999_price-025000-049999",
@@ -47,8 +47,8 @@
       "maxYear": 1995,
       "minPrice": 26314,
       "maxPrice": 29366,
-      "bytes": 4613,
-      "sha256": "51b1fca5d22770ab9cef290cdeb4aed59039c03571eaf0a92c76940fbb885d93"
+      "bytes": 5339,
+      "sha256": "99851acaf5fe0adfe537b9991a52a6c2837ff077c32fe3baaca43d3ce9e2e8a0"
     },
     {
       "id": "year-1990-1999_price-050000-099999",
@@ -58,8 +58,8 @@
       "maxYear": 1992,
       "minPrice": 62000,
       "maxPrice": 62000,
-      "bytes": 3048,
-      "sha256": "db1f9a21c9a651c2c931a5555d6169ddef917d9b1ca37eb58cdc92f36d84eb23"
+      "bytes": 3546,
+      "sha256": "ffaa51a9779dcb25f056bf0c3a6c25e834e69fc6bc0d55aa3b03d4df3f4e42b8"
     },
     {
       "id": "year-1990-1999_price-unavailable",
@@ -69,8 +69,8 @@
       "maxYear": 1999,
       "minPrice": null,
       "maxPrice": null,
-      "bytes": 7743854,
-      "sha256": "6d66afc42fdbcac40d5016375b51d365674d32ad4c2fe60dfd7af04f0a189957"
+      "bytes": 8828346,
+      "sha256": "602a95e472647da97f8dba7a3c29cbbf614dd4a2b2d2ad1a3b48c722c25fe880"
     },
     {
       "id": "year-2000-2009_price-000000-009999",
@@ -80,8 +80,8 @@
       "maxYear": 2009,
       "minPrice": 1643,
       "maxPrice": 9987,
-      "bytes": 7382432,
-      "sha256": "bb1c4819958dceb00366d44bfcf5a7eaebf68a6faf99499deaeb35abafef6050"
+      "bytes": 7574068,
+      "sha256": "29bbddc8aaa20bbc31b3eac86bd90a16607840c12af767a3bbc4a90931aecd36"
     },
     {
       "id": "year-2000-2009_price-010000-024999",
@@ -91,8 +91,8 @@
       "maxYear": 2009,
       "minPrice": 10062,
       "maxPrice": 23423,
-      "bytes": 567403,
-      "sha256": "b041073032c1149fb863e65e91d4d31e3943bb63a07d63410c2c3288424a5f63"
+      "bytes": 582894,
+      "sha256": "43b4687a0d46574dfc545f3c609d79286a7262fd46b46928340050c945c4b063"
     },
     {
       "id": "year-2000-2009_price-025000-049999",
@@ -102,8 +102,8 @@
       "maxYear": 2009,
       "minPrice": 25030,
       "maxPrice": 49771,
-      "bytes": 108212,
-      "sha256": "91dbefe77c392e14ed241c02dedf58a6bbd7bb68e3edc3f04d900d9e3d87776e"
+      "bytes": 114002,
+      "sha256": "f12f42e6790a2005fbd5a864bb4783d52fc7f49395f16c1d88011262e698ee73"
     },
     {
       "id": "year-2000-2009_price-050000-099999",
@@ -113,8 +113,8 @@
       "maxYear": 2009,
       "minPrice": 62378,
       "maxPrice": 88896,
-      "bytes": 6346,
-      "sha256": "2bcaa33d6284d5e550fff62fdeda2c9bfced03af732ac8e2cf7170709a62cccd"
+      "bytes": 6646,
+      "sha256": "f7dca69f4d2d729c29913b7190ee2cc0ac671f41f0d32c17d8816a6dec812a19"
     },
     {
       "id": "year-2000-2009_price-unavailable",
@@ -124,8 +124,8 @@
       "maxYear": 2009,
       "minPrice": null,
       "maxPrice": null,
-      "bytes": 5745158,
-      "sha256": "85713d8f74ab93588af449f0e46cd4c03ce00b77892de4b858d0e65646bed7fb"
+      "bytes": 5897853,
+      "sha256": "2a58efe7c98e79d9fcbb0f4faa1646f1be34927fd6540cd8707ac4b4f76ac89d"
     },
     {
       "id": "year-2010-2019_price-000000-009999",
@@ -135,8 +135,8 @@
       "maxYear": 2019,
       "minPrice": 2708,
       "maxPrice": 9997,
-      "bytes": 5452087,
-      "sha256": "148d938d0aed1bebbba68c5c2feccc458c5b97bbc85fa7b6e855fc6446bf66bb"
+      "bytes": 5567619,
+      "sha256": "355eb92bb08d81a83673f06f4fe8eb4de34024472e3b6e822f81392813ae21be"
     },
     {
       "id": "year-2010-2019_price-010000-024999",
@@ -146,8 +146,8 @@
       "maxYear": 2019,
       "minPrice": 10001,
       "maxPrice": 24930,
-      "bytes": 3807814,
-      "sha256": "04a5c3b201f1e594593011d88d920b87d679f374dc843e24de2472dcabd56ba4"
+      "bytes": 3880202,
+      "sha256": "0e7e5e486d9df1bb2cd6ab7192ee49bbe6fc22f70b5a7f306d1af759c85dcb03"
     },
     {
       "id": "year-2010-2019_price-025000-049999",
@@ -157,8 +157,8 @@
       "maxYear": 2019,
       "minPrice": 25080,
       "maxPrice": 49997,
-      "bytes": 407468,
-      "sha256": "48a733908fffa4c94853394b8255d13b68cd2deae0404c4292f897d2c50efb56"
+      "bytes": 414310,
+      "sha256": "bae3f9781caa5e6d7dae2df5976e46fa28eee86ca43f602d11e44fbd719d5387"
     },
     {
       "id": "year-2010-2019_price-050000-099999",
@@ -168,8 +168,8 @@
       "maxYear": 2019,
       "minPrice": 51513,
       "maxPrice": 97978,
-      "bytes": 63527,
-      "sha256": "f389a4c819f49e2752552ba603666ad0a7907981bf0a9b862a2c65c65c931f9e"
+      "bytes": 65647,
+      "sha256": "1d0cd872305bd57f742670beedbb2e91a0046a94ebb74b94335443fff32a78c9"
     },
     {
       "id": "year-2010-2019_price-100000-249999",
@@ -179,8 +179,8 @@
       "maxYear": 2019,
       "minPrice": 109124,
       "maxPrice": 170566,
-      "bytes": 6240,
-      "sha256": "d1c104bbbffbaaec40c7426d6b9e37dc53f7bc59dffba97ea237a604cf27242c"
+      "bytes": 6689,
+      "sha256": "5c066bf72484bb225c33a5a0bf9645ef070ba16e616b94a73f12e862cd00723c"
     },
     {
       "id": "year-2010-2019_price-unavailable",
@@ -190,8 +190,8 @@
       "maxYear": 2019,
       "minPrice": null,
       "maxPrice": null,
-      "bytes": 6439325,
-      "sha256": "0a3180fa1baa24fecf5dbcce466a2c1f11a54be8810fa83637ca20dd77f0e1a2"
+      "bytes": 6580278,
+      "sha256": "c22a56e36ba1919d08df2e117b1ea707ec80d356dc23d615e10d09d04eee25e0"
     },
     {
       "id": "year-2020-2029_price-000000-009999",
@@ -201,8 +201,8 @@
       "maxYear": 2022,
       "minPrice": 5779,
       "maxPrice": 9987,
-      "bytes": 46902,
-      "sha256": "a2b10a747fb511a3f34ebfbf836566bcbf160d3f12d7284cf20040c99dcf43e0"
+      "bytes": 49863,
+      "sha256": "7a3ea77eb42d38fe9929174cf29de6eee44a4e29e89355f3a45e65189e8858de"
     },
     {
       "id": "year-2020-2029_price-010000-024999",
@@ -212,8 +212,8 @@
       "maxYear": 2026,
       "minPrice": 10189,
       "maxPrice": 24975,
-      "bytes": 1879624,
-      "sha256": "beb535eb95afb4004867ef727b791d061f99c0174babb3f34809dc7cb91e7368"
+      "bytes": 1916471,
+      "sha256": "9450fcf0ea15a4f59a2ecf77589588604403cb2835aefd76292ab938c68f9041"
     },
     {
       "id": "year-2020-2029_price-025000-049999",
@@ -223,8 +223,8 @@
       "maxYear": 2027,
       "minPrice": 25174,
       "maxPrice": 49746,
-      "bytes": 2175331,
-      "sha256": "0b3a6da0c69134054346c93ec9eddf6d2dd0a104157558144b8d415174643abf"
+      "bytes": 2214260,
+      "sha256": "d217a6ca694a9204175bf9f68cd77ec5a8c6fb012f520ad0508a4f0448999100"
     },
     {
       "id": "year-2020-2029_price-050000-099999",
@@ -234,8 +234,8 @@
       "maxYear": 2027,
       "minPrice": 50299,
       "maxPrice": 98105,
-      "bytes": 464802,
-      "sha256": "aed8106857135c81c4fce9185c1e14064660f8470e8045c3f8d485f532a8b450"
+      "bytes": 470482,
+      "sha256": "eed48a4ede1bb98f4c6381713b20e98ccaa611385116251b25472fd8344e06b3"
     },
     {
       "id": "year-2020-2029_price-100000-249999",
@@ -245,8 +245,8 @@
       "maxYear": 2027,
       "minPrice": 101340,
       "maxPrice": 168810,
-      "bytes": 15767,
-      "sha256": "fb59bcab048b38eea88df502e0ee7bf9bce5929736d3238da09745d49b3ad9a1"
+      "bytes": 16117,
+      "sha256": "3a48dfe175a166eac2ec3a695bdf9feda2a5bd2345ac78e5633621efc74e532d"
     },
     {
       "id": "year-2020-2029_price-unavailable",
@@ -256,14 +256,14 @@
       "maxYear": 2027,
       "minPrice": null,
       "maxPrice": null,
-      "bytes": 6828263,
-      "sha256": "00a0bcebbf217832ded13888a64bc6e258040531d0c705157fe5143fd8f337a4"
+      "bytes": 7237538,
+      "sha256": "0747182044a2790bd1d06b324c6b68b8f67ee939bbf2f7bb15e85116796dead3"
     }
   ],
   "specCoverage": {
-    "horsepower": 6915,
-    "doors": 11467,
-    "seats": 8390,
+    "horsepower": 15251,
+    "doors": 11555,
+    "seats": 8534,
     "generation": 3106
   },
   "facetsUrl": "data/facets.json",
@@ -292,7 +292,7 @@
     {
       "name": "EPA Fuel Economy Test Car List",
       "url": "https://www.epa.gov/compliance-and-fuel-economy-data/data-cars-used-testing-fuel-economy",
-      "retrievedAt": "2026-11-09T22:15:35Z",
+      "retrievedAt": "2026-11-10T00:53:25Z",
       "license": "U.S. federal government public data"
     }
   ]

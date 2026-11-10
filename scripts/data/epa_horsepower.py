@@ -7,8 +7,11 @@ import argparse
 import csv
 import hashlib
 import re
+import shutil
+import subprocess
 import unicodedata
 import xml.etree.ElementTree as ET
+from binascii import crc32
 from collections import defaultdict
 from decimal import Decimal, InvalidOperation
 from html.parser import HTMLParser
@@ -49,6 +52,29 @@ LEGACY_MAKES = {
     "bentleymotorsltd": {"bentley"},
     "rollsroycemotorcarsltd": {"rollsroyce"},
 }
+
+# EPA 420-B-26-027 lists the manufacturer codes for the ZIP archives. The
+# additional older codes below are identified by the archive's manufacturer
+# abbreviations. Make resolution still requires an exact, unique carline.
+ARCHIVE_MAKES = {
+    10: {"amc", "jeep", "renault"}, 20: LEGACY_MAKES["daimlerchrysler"] | {"eagle"},
+    30: LEGACY_MAKES["fordmotorcompany"], 40: LEGACY_MAKES["generalmotors"] | {"geo"},
+    70: {"astonmartin"}, 90: {"alfaromeo", "fiat"}, 95: {"amgeneral", "hummer"},
+    108: {"landrover"}, 120: {"bmw"}, 178: {"daewoo"}, 190: {"daihatsu"},
+    196: {"dodge", "eagle", "mitsubishi", "plymouth"}, 200: {"mercedesbenz"},
+    220: {"ferrari"}, 230: {"fiat"}, 260: LEGACY_MAKES["honda"], 265: {"hyundai"},
+    290: {"isuzu"}, 305: {"jaguar"}, 338: {"kia"}, 350: {"lotus"}, 360: {"maserati"},
+    380: LEGACY_MAKES["nissan"], 407: {"panoz"}, 410: {"peugeot"}, 413: {"pininfarina"},
+    420: {"porsche"}, 430: {"renault"}, 440: {"bentley", "rollsroyce"},
+    460: {"landrover"}, 470: {"saab"}, 490: {"mitsubishi", "dodge", "plymouth"},
+    491: {"mitsubishi"}, 492: {"mitsubishi"}, 540: {"suzuki", "chevrolet", "geo"},
+    560: {"mazda"}, 570: LEGACY_MAKES["toyota"], 576: {"chevrolet", "geo", "pontiac", "toyota"},
+    590: {"audi", "volkswagen"}, 600: {"volvo"}, 614: {"yugo"},
+    640: {"audi"}, 660: {"subaru"}, 690: {"lamborghini"}, 691: {"lamborghini"},
+}
+ARCHIVE_DRIVES = {"FWD": "F", "RWD": "R", "4WD": "4", "F": "F", "R": "R", "4": "4"}
+GUIDE_ARCHIVE_DRIVES = {**DRIVES, "4wheelorallwheeldrive": "4", "2wheeldrive": "2", "": ""}
+CUBIC_INCH_LITERS = Decimal("0.016387064")
 
 
 def text(value) -> str:
@@ -109,6 +135,17 @@ def guide_fingerprint(row: dict, key: Key) -> str:
     return hashlib.sha256("\x1f".join(map(str, fields)).encode()).hexdigest()[:16]
 
 
+def archive_guide_key(row: dict) -> Key | None:
+    """Retain the old guide's combined drive labels and explicit 1984 blanks."""
+    drive = GUIDE_ARCHIVE_DRIVES.get(name(row.get("drive")))
+    if drive is None:
+        return None
+    # Use the common engine and transmission validation while admitting
+    # archive-only drive labels. The actual drive code stays in the signature.
+    key = guide_key({**row, "drive": "Front-Wheel Drive"})
+    return (*key[:7], drive, key[8]) if key else None
+
+
 def test_key(row: dict) -> Key | None:
     year = integer(row.get("Model Year"))
     make, model = name(row.get("Represented Test Veh Make")), name(row.get("Represented Test Veh Model"))
@@ -144,12 +181,13 @@ class ReportLinks(HTMLParser):
     def handle_endtag(self, tag):
         if tag != "a" or not self.href:
             return
-        match = re.search(r"\b(20\d{2})\s+Test\s+Car\s+List\s+Data\b", "".join(self.label), flags=re.I)
+        match = re.search(r"\b((?:19|20)\d{2})\s+Test\s+Car\s+List\s+Data\b", "".join(self.label), flags=re.I)
         url = urljoin(SOURCE_HOME, self.href)
         target = urlsplit(url)
-        if match and target.scheme == "https" and target.hostname == "www.epa.gov" and target.path.endswith((".csv", ".xlsx")):
+        if match and target.scheme == "https" and target.hostname == "www.epa.gov":
             year = int(match[1])
-            if url not in self.years[year]:
+            suffixes = (".zip",) if year < 2000 else (".csv", ".xlsx")
+            if target.path.endswith(suffixes) and url not in self.years[year]:
                 self.years[year].append(url)
         self.href = None
 
@@ -239,6 +277,97 @@ def read_tests(path: Path, guide_rows):
             yield from reader
 
 
+def read_archive_lines(path: Path) -> list[str]:
+    with ZipFile(path) as archive:
+        members = [item for item in archive.infolist() if not item.is_dir()]
+        if len(members) != 1 or members[0].file_size > 2_000_000:
+            raise ValueError(f"Unexpected EPA archive structure in {path}")
+        member = members[0]
+        if member.compress_type == 6:  # PKZIP Implode, used in the 1984–1993 files.
+            unzip = shutil.which("unzip")
+            git = shutil.which("git")
+            if not unzip and git:
+                bundled = Path(git).resolve().parents[1] / "usr" / "bin" / "unzip.exe"
+                unzip = str(bundled) if bundled.is_file() else None
+            if not unzip:
+                raise RuntimeError("Install Info-ZIP unzip (included with Git for Windows) to read the older EPA archives.")
+            payload = subprocess.run([unzip, "-p", str(path.resolve()), member.filename],
+                                     capture_output=True, check=True, timeout=30).stdout
+            if len(payload) != member.file_size or crc32(payload) != member.CRC:
+                raise ValueError(f"EPA archive CRC mismatch in {path}")
+        else:
+            payload = archive.read(member)
+    return payload.decode("cp1252", errors="replace").splitlines()
+
+
+def fixed_archive_rows(lines):
+    """Select only the documented engine rating, never the dynamometer setting."""
+    for line in lines:
+        if len(line) < 207 or line[88:89].strip():
+            continue
+        yield {"yr": line[:4], "mfr": line[6:9], "bidx": line[9:14], "cid": line[14:18],
+               "trns": line[43:45], "rhp": line[120:123], "carline": line[165:190],
+               "drv": line[203:206]}
+
+
+def match_archive(year: int, guide_rows, archive_rows):
+    guides_by_model = defaultdict(list)
+    for row in guide_rows:
+        key = archive_guide_key(row)
+        if key is not None:
+            guides_by_model[key[2]].append((row, key))
+    ratings = defaultdict(set)
+    for record in archive_rows:
+        manufacturer = ARCHIVE_MAKES.get(integer(record.get("mfr")), set())
+        engine_index = integer(record.get("bidx"))
+        cubic_inches = integer(record.get("cid"))
+        horsepower = integer(record.get("rhp"))
+        transmission = text(record.get("trns"))
+        raw_drive = text(record.get("drv"))
+        drive = ARCHIVE_DRIVES.get(raw_drive)
+        if (integer(record.get("yr")) != year or not manufacturer or not cubic_inches
+                or not horsepower or not 25 <= horsepower <= 2000 or (year != 1984 and drive is None)
+                or text(record.get("police")) == "Y"):
+            continue
+        if year < 1998 and not engine_index:
+            continue
+        match = re.fullmatch(r"([ALCMS])(\d+)", transmission)
+        if match:
+            trans = ({"A": "A", "L": "A", "C": "M", "M": "M", "S": "SA"}[match[1]], int(match[2]))
+        elif transmission == "AV":
+            trans = ("CVT", 0)
+        else:
+            continue
+        if year >= 1998:
+            code = integer(record.get("fuel"))
+            fuel = "diesel" if code == 9 else "gasoline" if code in {6, 22, 23} else None
+            if fuel is None:
+                continue
+        else:
+            fuel = None  # The numeric basic engine index identifies the tested engine.
+        carline = text(record.get("carline"))
+        badge = re.fullmatch(r"(.*?)\s*\(([A-Za-z -]+)\)", carline)
+        if badge and name(badge[2]) in manufacturer:
+            carline, manufacturer = badge[1], {name(badge[2])}
+        engine_liters = cubic_inches * CUBIC_INCH_LITERS
+        candidates = [
+            (row, key) for row, key in guides_by_model[name(carline)]
+            if key[0] == year and key[1] in manufacturer and key[5:7] == trans
+            and abs(key[3] - engine_liters) <= Decimal("0.055")
+            and (drive == key[7] or (year == 1984 and not raw_drive))
+            and (fuel is None or fuel == key[8])
+            and (year >= 1998 or engine_index == integer(row.get("engId")))
+        ]
+        engines = {(key, *(text(row.get(field)) for field in ("engId", "eng_dscr", "tCharger", "sCharger")))
+                   for row, key in candidates}
+        if len(engines) != 1:
+            continue
+        for row, key in candidates:
+            ratings[(text(row.get("id")), guide_fingerprint(row, key))].add(horsepower)
+    return {identifier: [next(iter(values)), fingerprint]
+            for (identifier, fingerprint), values in ratings.items() if len(values) == 1}
+
+
 def read_snapshot() -> dict:
     snapshot = load_json(SNAPSHOT) if SNAPSHOT.exists() else {"sources": {}, "vehicles": {}}
     oem_sources = load_json(OEM_RATINGS) if OEM_RATINGS.exists() else []
@@ -262,7 +391,8 @@ def lookup_horsepower(row: dict, snapshot: dict) -> tuple[int, dict] | None:
     match = snapshot["vehicles"].get(identifier)
     if not match:
         return None
-    key = guide_key(row)
+    year = integer(row.get("year"))
+    key = archive_guide_key(row) if year is not None and year < 2000 else guide_key(row)
     if key is None or match[1] != guide_fingerprint(row, key):
         return None
     source = snapshot["sources"][str(key[0])]
@@ -314,8 +444,8 @@ def main() -> None:
     webpage, _ = download_with_cache(SOURCE_HOME, cache / "report-index.html", offline=args.offline)
     links = ReportLinks()
     links.feed(webpage.read_text(encoding="utf-8"))
-    if not set(range(2000, 2027)).issubset(links.years):
-        raise ValueError("EPA index is missing expected 2000–2026 reports")
+    if not set(range(1984, 2027)).issubset(links.years):
+        raise ValueError("EPA index is missing expected 1984–2026 reports")
     guide_path = args.cache_dir / load_config()["sources"]["epa"]["cacheFile"]
     guide_by_year = defaultdict(list)
     for row in iter_epa_rows(guide_path):
@@ -327,7 +457,13 @@ def main() -> None:
             for url in urls
         ]
         guides = guide_by_year[year]
-        matched = match_tests(guides, chain.from_iterable(read_tests(path, guides) for path, _ in files))
+        if year < 2000:
+            def archive_rows(path):
+                lines = read_archive_lines(path)
+                return csv.DictReader(lines) if year >= 1998 else fixed_archive_rows(lines)
+            matched = match_archive(year, guides, chain.from_iterable(archive_rows(path) for path, _ in files))
+        else:
+            matched = match_tests(guides, chain.from_iterable(read_tests(path, guides) for path, _ in files))
         if not matched and guide_by_year[year]:
             raise ValueError(f"Zero matching horsepower records in {year}")
         print(f"{year}: {len(matched):,} horsepower matches", flush=True)

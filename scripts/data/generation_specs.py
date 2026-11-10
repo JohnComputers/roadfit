@@ -16,6 +16,8 @@ from pathlib import Path
 from typing import NamedTuple
 from urllib.request import Request, urlopen
 
+from vpic_body_specs import VPIC_DOCUMENTATION, VPIC_PATH
+
 ROOT = Path(__file__).resolve().parents[2]
 GENERATION_PATH = ROOT / 'pipeline/vehicle-generations.json'
 NCAP_PATH = ROOT / 'pipeline/ncap-body-specs.csv'
@@ -34,6 +36,10 @@ class BodySpec(NamedTuple):
     body: str
     doors: int | None
     seats: int | None
+
+
+def vpic_model_key(value: str) -> str:
+    return model_key(value).removesuffix('pickup') or model_key(value)
 
 
 def words(value: str) -> str:
@@ -145,9 +151,50 @@ def load_generation_specs() -> tuple[dict, dict]:
     return dict(generations), dict(ncap)
 
 
-def consensus(records: list[BodySpec], field: str) -> int | None:
+def load_vpic_body_specs() -> dict:
+    index = defaultdict(list)
+    with VPIC_PATH.open(encoding='utf-8', newline='') as file:
+        for row in csv.DictReader(file):
+            identity = int(row['year']), make_key(row['make']), vpic_model_key(row['model'])
+            index[identity].append(BodySpec(
+                tuple(row['drives'].split('/')) if row['drives'] else (), row['body'],
+                int(row['doors']) if row['doors'] else None, int(row['seats']) if row['seats'] else None,
+            ))
+    return dict(index)
+
+
+def consensus(records: list[BodySpec], field: str) -> int | str | None:
     values = {getattr(record, field) for record in records}
     return values.pop() if len(values) == 1 else None
+
+
+def enrich_vpic_body(vehicle: dict, index: dict) -> None:
+    specs = vehicle['specs']
+    identity = vehicle['year'], make_key(vehicle['make']), vpic_model_key(vehicle['model'])
+    body = explicit_body(vehicle['model']) or (vehicle.get('bodyStyle') or '').lower()
+    drive = specs.get('drivetrain')
+    if (vehicle.get('sourceDetails') or {}).get('drivetrainRaw') == '4-Wheel or All-Wheel Drive':
+        drive = None
+    candidates = [record for record in index.get(identity, ())
+                  if (not drive or not record.drives or drive in record.drives)
+                  and (not body or not record.body or body == record.body)
+                  and (not specs.get('doors') or not record.doors or specs['doors'] == record.doors)]
+    added = []
+    for field, label in (('doors', 'Doors'), ('seats', 'Seats')):
+        value = consensus(candidates, field)
+        if value is not None and specs.get(field) is None:
+            specs[field] = value
+            added.append(label)
+    body_style = consensus(candidates, 'body')
+    if body_style and not vehicle.get('bodyStyle'):
+        vehicle['bodyStyle'] = 'SUV' if body_style == 'suv' else body_style.title()
+        added.append('Body style')
+    if added:
+        vehicle['provenance'].append({
+            'source': 'NHTSA vPIC manufacturer vehicle specifications', 'url': VPIC_DOCUMENTATION,
+            'sourceId': 'October 2026 standalone database', 'license': 'U.S. federal government public data',
+            'fields': added,
+        })
 
 
 def enrich_vehicle(vehicle: dict, dataset: tuple[dict, dict]) -> None:

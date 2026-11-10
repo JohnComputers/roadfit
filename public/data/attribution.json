@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-09T22:18:46Z",
+  "generatedAt": "2026-11-10T01:01:38Z",
   "sources": [
     {
       "name": "EPA/DOE FuelEconomy.gov",
@@ -23,7 +23,7 @@
     {
       "name": "EPA Fuel Economy Test Car List",
       "url": "https://www.epa.gov/compliance-and-fuel-economy-data/data-cars-used-testing-fuel-economy",
-      "retrievedAt": "2026-11-09T22:15:35Z",
+      "retrievedAt": "2026-11-10T00:53:25Z",
       "license": "U.S. federal government public data"
     }
   ],

@@ -31,7 +31,8 @@ from common import (
     utc_now,
 )
 from epa_horsepower import SOURCE as HORSEPOWER_SOURCE, SOURCE_HOME as HORSEPOWER_HOME, lookup_horsepower, read_snapshot
-from generation_specs import enrich_vehicle, load_generation_specs
+from electrified_power import add_electrified_power, load_electrified_power
+from generation_specs import enrich_vehicle, enrich_vpic_body, load_generation_specs, load_vpic_body_specs
 
 
 EPA_SOURCE = "EPA/DOE FuelEconomy.gov"
@@ -50,7 +51,7 @@ def as_int(value: Any) -> int | None:
     try:
         raw = text(value).replace(",", "")
         return int(round(float(raw))) if raw else None
-    except (TypeError, ValueError):
+    except (OverflowError, TypeError, ValueError):
         return None
 
 
@@ -276,6 +277,30 @@ def engine_label(displacement: float | None, cylinders: int | None, row: dict[st
     return " ".join(parts) or None
 
 
+def epa_economy_details(row: dict[str, str], fuel: str | None) -> dict:
+    """Keep published label metrics and separate plug-in range from total range."""
+    primary, secondary = text(row.get('fuelType1')).casefold(), text(row.get('fuelType2')).casefold()
+    details = {'efficiencyUnit': 'MPGe' if fuel == 'EV' or primary == 'cng' else 'MPG'}
+    if cost := positive_int(row.get('fuelCost08')):
+        details['annualFuelCostUsd'] = cost
+    co2 = as_float(row.get('co2TailpipeGpm'))
+    if co2 is not None and co2 >= 0:
+        details['tailpipeCo2GramsPerMile'] = round(co2)
+    if fuel in {'EV', 'PHEV'} and (primary == 'electricity' or secondary == 'electricity'):
+        plug_in = fuel == 'PHEV'
+        if range_miles := positive_int(row.get('rangeA' if plug_in else 'range')):
+            details['electricRangeMiles'] = range_miles
+            details['electricRangeScope'] = 'charge-depleting' if plug_in and text(row.get('phevBlended')).lower() == 'true' else 'electric'
+        if charge_time := positive_float(row.get('charge240')):
+            details['chargeTimeHours240V'] = charge_time
+        if consumption := positive_float(row.get('combE')):
+            details['electricityKwhPer100Miles'] = round(consumption, 1)
+    motor = text(row.get('evMotor'))
+    if fuel in {'EV', 'PHEV', 'Hybrid'} and re.search(r'\bkw\b', motor, re.I):
+        details['electricMotorDescription'] = motor
+    return details
+
+
 def price_for_record(make: str, model: str, year: int, names: NameNormalizer, prices: dict[tuple[str, str, int], dict[str, Any]]) -> tuple[dict[str, Any] | None, str | None, dict[str, Any] | None]:
     make_key = names.make(make)
     for position, model_key in enumerate(descriptor_stripped_keys(make, model, names)):
@@ -387,7 +412,9 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
     prices, price_source_stats = load_prices(forcar_path, names, source_timestamp(forcar_meta))
     vpic_index = load_vpic_index(cache_dir, names)
     horsepower_snapshot = read_snapshot()
+    electrified_power = load_electrified_power()
     generation_specs = load_generation_specs()
+    vpic_body_specs = load_vpic_body_specs()
 
     seen_signatures: set[tuple[str, ...]] = set()
     records: list[dict[str, Any]] = []
@@ -451,13 +478,14 @@ def build_catalog(*, cache_dir: Path = CACHE_DIR, output_dir: Path = PUBLIC_DATA
                 "drivetrainRaw": text(row.get("drive")) or None,
                 "fuelPrimaryRaw": text(row.get("fuelType1")) or None,
                 "fuelSecondaryRaw": text(row.get("fuelType2")) or None,
-                "efficiencyUnit": "MPGe" if fuel == "EV" else "MPG",
-                "electricRangeMiles": positive_int(row.get("range")),
-                "chargeTimeHours240V": positive_float(row.get("charge240")),
+                **epa_economy_details(row, fuel),
+                **({"horsepowerScope": "test-vehicle"} if rated_power and rated_power[1]["source"] == HORSEPOWER_SOURCE else {}),
                 "vpicMakeModelMatched": bool(vpic_match),
             },
         }
+        add_electrified_power(record, electrified_power)
         enrich_vehicle(record, generation_specs)
+        enrich_vpic_body(record, vpic_body_specs)
         records.append(record)
 
     if not records:

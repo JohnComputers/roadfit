@@ -15,9 +15,11 @@ The current generated catalog contains:
 - **34,425** deliberately unpriced configurations rather than fabricated
   estimates
 - **13,496** records with a make/model name match in NHTSA vPIC
-- Sourced horsepower on **6,915** configurations, doors on **11,467**, seats on
-  **8,390**, and generation labels on **3,106**
-- **1,127** licensed cover photos across **3,437** configurations
+- Sourced horsepower on **15,251** configurations, doors on **11,555**, seats on
+  **8,534**, and generation labels on **3,106**
+- **1,188** licensed cover photos across **4,120** configurations
+- EPA fuel-cost estimates on **49,659** configurations, with tailpipe CO₂ and
+  plug-in range and charging data where applicable
 - 23 year-and-price shards, loaded only when a search needs them
 
 These figures describe the checked-in catalog build and will change when the

@@ -90,7 +90,13 @@ export interface VehicleRecord {
     fuelSecondaryRaw?: string | null;
     efficiencyUnit?: 'MPG' | 'MPGe' | string | null;
     electricRangeMiles?: number | null;
+    electricRangeScope?: 'electric' | 'charge-depleting';
     chargeTimeHours240V?: number | null;
+    electricMotorDescription?: string;
+    electricityKwhPer100Miles?: number;
+    annualFuelCostUsd?: number;
+    tailpipeCo2GramsPerMile?: number;
+    horsepowerScope?: 'system' | 'test-vehicle';
     vpicMakeModelMatched?: boolean;
     seatingNote?: string;
   };

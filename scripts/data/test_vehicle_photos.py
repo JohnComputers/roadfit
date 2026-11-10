@@ -1,6 +1,6 @@
 import unittest
 
-from build_vehicle_photos import compatible, photo_candidate
+from build_vehicle_photos import compatible, photo_candidate, year_span
 
 
 def commons_photo(title, model='F-150', body='Pickup'):
@@ -19,6 +19,11 @@ def commons_photo(title, model='F-150', body='Pickup'):
 
 
 class VehiclePhotosTest(unittest.TestCase):
+    def test_generation_span_is_bounded_and_not_an_exact_year(self):
+        self.assertEqual(year_span('1998–00 Nissan Frontier'), (1998, 2000, 'Nissan Frontier'))
+        self.assertIsNone(year_span('1984–2020 Chevrolet Corvette'))
+        self.assertIsNone(year_span('2020 Ford F-150'))
+
     def test_commons_verification_does_not_bypass_variant_check(self):
         pairs = {('ford', 'f150')}
         self.assertIsNone(photo_candidate(commons_photo('2020 Ford F-150 Raptor, front.jpg'), pairs))

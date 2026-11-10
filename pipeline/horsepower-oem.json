@@ -1,5 +1,21 @@
 [
   {
+    "name": "Ford Mustang model history",
+    "url": "https://media.ford.com/content/dam/fordmedia/North%20America/US/2013/12/05/Mustang_Milestones.pdf",
+    "retrievedAt": "2026-11-10",
+    "year": 1987,
+    "make": "Ford",
+    "ratings": {"3031": ["Mustang", 5.0, 8, 225], "3032": ["Mustang", 5.0, 8, 225]}
+  },
+  {
+    "name": "Ford Division 1999 Mustang GT release",
+    "url": "https://www.theautochannel.com/news/press/date/19981130/press001006.html",
+    "retrievedAt": "2026-11-10",
+    "year": 1999,
+    "make": "Ford",
+    "ratings": {"14866": ["Mustang", 4.6, 8, 260]}
+  },
+  {
     "name": "Ford 2020 F-150 technical specifications",
     "url": "https://media.ford.com/content/dam/fordmedia/North%20America/US/product/2020/f150/2020-F150-TechSpecs.pdf",
     "retrievedAt": "2026-11-09",

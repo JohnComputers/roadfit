@@ -2,7 +2,7 @@
 
 import unittest
 
-from epa_horsepower import lookup_horsepower, match_tests
+from epa_horsepower import lookup_horsepower, match_archive, match_tests
 
 
 GUIDE = {
@@ -37,6 +37,15 @@ class HorsepowerTests(unittest.TestCase):
             with self.subTest(changes=changes):
                 self.assertEqual(match_tests([{**GUIDE, **changes}], [TEST]), {})
         self.assertEqual(match_tests([GUIDE], [{**TEST, "Police - Emergency Vehicle?": "Y"}]), {})
+
+    def test_archived_ratings_require_the_same_basic_engine_index(self):
+        guide = {**GUIDE, 'year': '1990', 'make': 'Chevrolet', 'model': 'Corvette', 'displ': '5.7',
+                 'cylinders': '8', 'trany': 'Automatic 4-spd', 'drive': 'Rear-Wheel Drive'}
+        source = {'yr': '1990', 'mfr': '40', 'bidx': '7', 'cid': '350', 'trns': 'A4',
+                  'rhp': '245', 'carline': 'Corvette', 'drv': 'RWD'}
+        self.assertEqual(match_archive(1990, [guide], [source])['sample-1'][0], 245)
+        self.assertEqual(match_archive(1990, [guide], [{**source, 'bidx': '8'}]), {})
+        self.assertEqual(match_archive(1990, [guide], [source, {**source, 'rhp': '250'}]), {})
 
 
 if __name__ == "__main__":

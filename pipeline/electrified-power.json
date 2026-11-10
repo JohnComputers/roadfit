@@ -1,0 +1,129 @@
+[
+  {
+    "make": "Toyota", "name": "Toyota Prius fifth-generation specifications",
+    "url": "https://pressroom.toyota.com/a-stunner-is-born-all-new-2023-toyota-prius-expected-this-january/",
+    "ratings": [
+      {"model":"Prius(?: XLE/LTD)?","years":[2016,2022],"fuel":"Hybrid","liters":1.8,"drives":["FWD"],"hp":121},
+      {"model":"Prius Eco","years":[2016,2022],"fuel":"Hybrid","liters":1.8,"drives":["FWD"],"hp":121},
+      {"model":"Prius AWD(?: XLE/LTD)?","years":[2019,2022],"fuel":"Hybrid","liters":1.8,"drives":["AWD","4WD"],"hp":121},
+      {"model":"Prius(?: XLE/LTD)?","years":[2023,2026],"fuel":"Hybrid","liters":2.0,"drives":["FWD"],"hp":194},
+      {"model":"Prius AWD(?: XLE/LTD)?","years":[2023,2026],"fuel":"Hybrid","liters":2.0,"drives":["AWD","4WD"],"hp":196}
+    ]
+  },
+  {
+    "make": "Toyota", "name": "Toyota third-generation Prius and Prius c technical information",
+    "url": "https://pressroom.toyota.com/toyota-prius-c-completes-prius-family-vehicles/",
+    "ratings": [
+      {"model":"Prius","years":[2010,2015],"fuel":"Hybrid","liters":1.8,"hp":134},
+      {"model":"Prius c","years":[2012,2019],"fuel":"Hybrid","liters":1.5,"hp":99}
+    ]
+  },
+  {
+    "make": "Toyota", "name": "Toyota Prius Prime technical information",
+    "url": "https://pressroom.toyota.com/the-2022-toyota-prius-prime-ev-hybrid-harmony/",
+    "ratings": [{"model":"Prius Prime","years":[2017,2022],"fuel":"PHEV","liters":1.8,"hp":121}]
+  },
+  {
+    "make": "Toyota", "name": "Toyota Prius Plug-in Hybrid technical information",
+    "url": "https://pressroom.toyota.com/electrify-the-road-in-the-2025-toyota-prius-plug-in-hybrid/",
+    "ratings": [{"model":"Prius (?:Prime|PHEV)(?: SE)?","years":[2023,2025],"fuel":"PHEV","liters":2.0,"hp":220}]
+  },
+  {
+    "make": "Toyota", "name": "Toyota 2011 Camry Hybrid powertrain",
+    "url": "https://pressroom.toyota.com/2011-toyota-camry-gets-fuel-economy-boost-for-v6-engine/",
+    "ratings": [{"model":"Camry Hybrid","years":[2007,2011],"fuel":"Hybrid","liters":2.4,"hp":187}]
+  },
+  {
+    "make": "Toyota", "name": "Toyota seventh-generation Camry powertrain",
+    "url": "https://pressroom.toyota.com/toyota-introduces-seventh-generation-camry-for-2012/",
+    "ratings": [{"model":"Camry Hybrid(?: LE| XLE| XLE/SE)?","years":[2012,2017],"fuel":"Hybrid","liters":2.5,"hp":200}]
+  },
+  {
+    "make": "Toyota", "name": "Toyota eighth-generation Camry Hybrid powertrain",
+    "url": "https://pressroom.toyota.com/2024-toyota-camry-style-and-performance-in-americas-best-selling-midsize-sedan/",
+    "ratings": [{"model":"Camry Hybrid(?: LE| XLE| XLE/SE| SE/XLE/XSE)?","years":[2018,2024],"fuel":"Hybrid","liters":2.5,"hp":208}]
+  },
+  {
+    "make": "Toyota", "name": "Toyota ninth-generation Camry powertrain",
+    "url": "https://pressroom.toyota.com/2027-toyota-camry-brings-hybrid-power-and-standout-style-to-every-drive/",
+    "ratings": [
+      {"model":"Camry HEV FF (?:LE|SE/XLE/XSE)","years":[2025,2027],"fuel":"Hybrid","liters":2.5,"drives":["FWD"],"hp":225},
+      {"model":"Camry HEV AWD (?:LE|SE/XLE|XSE)","years":[2025,2027],"fuel":"Hybrid","liters":2.5,"drives":["AWD"],"hp":232}
+    ]
+  },
+  {
+    "make": "Toyota", "name": "Toyota Corolla Hybrid technical information",
+    "url": "https://pressroom.toyota.com/toyota-boosts-2023-corolla-hybrid-with-all-new-infrared-edition-new-grades-and-available-awd/",
+    "ratings": [
+      {"model":"Corolla Hybrid","years":[2020,2022],"fuel":"Hybrid","liters":1.8,"drives":["FWD"],"hp":121},
+      {"model":"Corolla Hybrid(?: SE)?(?: AWD)?(?: \\((?:Sport/)?Normal/Eco Modes\\))?","years":[2023,2025],"fuel":"Hybrid","liters":1.8,"hp":138}
+    ]
+  },
+  {
+    "make": "Toyota", "name": "Toyota fourth-generation RAV4 Hybrid powertrain",
+    "url": "https://pressroom.toyota.com/2018-toyota-rav4-ready-more-action-new-adventure-le-hybrid-grade/",
+    "ratings": [{"model":"RAV4 Hybrid AWD","years":[2016,2018],"fuel":"Hybrid","liters":2.5,"drives":["AWD","4WD"],"hp":194}]
+  },
+  {
+    "make": "Toyota", "name": "Toyota fifth-generation RAV4 Hybrid powertrain",
+    "url": "https://pressroom.toyota.com/all-new-2019-toyota-rav4-breaks-the-mold-for-the-segment-it-created/",
+    "ratings": [{"model":"RAV4 (?:Hybrid AWD(?: Woodland Edition)?|AWD (?:Limited & XSE|SE & LE|XLE))","years":[2019,2025],"fuel":"Hybrid","liters":2.5,"drives":["AWD","4WD"],"hp":219}]
+  },
+  {
+    "make": "Toyota", "name": "Toyota RAV4 Prime and Plug-in Hybrid powertrain",
+    "url": "https://pressroom.toyota.com/new-name-same-great-powertrain-for-the-2025-toyota-rav4-plug-in-hybrid/",
+    "ratings": [{"model":"RAV4 (?:Prime 4WD|PHEV AWD)","years":[2021,2025],"fuel":"PHEV","liters":2.5,"drives":["AWD","4WD"],"hp":302}]
+  },
+  {
+    "make": "Toyota", "name": "Toyota 2026 RAV4 powertrain specifications",
+    "url": "https://pressroom.toyota.com/the-next-adventure-begins-2026-rav4-arrives-this-winter/",
+    "ratings": [
+      {"model":"RAV4","years":[2026,2026],"fuel":"Hybrid","liters":2.5,"drives":["FWD"],"hp":226},
+      {"model":"RAV4 (?:Hybrid AWD(?: Woodland Edition)?|AWD (?:Limited & XSE|SE & LE|XLE))","years":[2026,2026],"fuel":"Hybrid","liters":2.5,"drives":["AWD"],"hp":236},
+      {"model":"RAV4 PHEV AWD","years":[2026,2026],"fuel":"PHEV","liters":2.5,"drives":["AWD"],"hp":324}
+    ]
+  },
+  {
+    "make": "Honda", "name": "Honda two-motor hybrid-electric powertrain",
+    "url": "https://hondanews.com/en-US/honda-automobiles/releases/honda-two-motor-hybrid-electric-system",
+    "ratings": [
+      {"model":"Accord Hybrid","years":[2017,2022],"fuel":"Hybrid","liters":2.0,"hp":212},
+      {"model":"Accord Hybrid(?: Sport/Touring)?","years":[2023,2026],"fuel":"Hybrid","liters":2.0,"hp":204},
+      {"model":"CR-V Hybrid AWD","years":[2020,2022],"fuel":"Hybrid","liters":2.0,"hp":212},
+      {"model":"CR-V (?:Hybrid )?(?:AWD(?: TrailSport)?|FWD)","years":[2023,2026],"fuel":"Hybrid","liters":2.0,"hp":204},
+      {"model":"Insight(?: Touring)?","years":[2019,2022],"fuel":"Hybrid","liters":1.5,"hp":151},
+      {"model":"Civic(?: 4Dr| 5Dr| Hatchback)? Hybrid(?: Sport Touring)?","years":[2025,2026],"fuel":"Hybrid","liters":2.0,"hp":200},
+      {"model":"Prelude","years":[2026,2026],"fuel":"Hybrid","liters":2.0,"hp":200}
+    ]
+  },
+  {
+    "make": "Nissan", "name": "Nissan first-generation LEAF electric drive",
+    "url": "https://usa.nissannews.com/en-US/releases/us-2017-nissan-leaf-press-kit",
+    "ratings": [{"model":"Leaf(?: \\((?:24|30) kW-hr battery pack\\))?","years":[2011,2017],"fuel":"EV","drives":["FWD"],"hp":107}]
+  },
+  {
+    "make": "Nissan", "name": "Nissan second-generation LEAF electric drive",
+    "url": "https://usa.nissannews.com/en-US/releases/2025-nissan-leaf-press-kit",
+    "ratings": [
+      {"model":"Leaf","years":[2018,2018],"fuel":"EV","drives":["FWD"],"hp":147},
+      {"model":"Leaf \\(40 kW-hr battery pack\\)","years":[2019,2025],"fuel":"EV","drives":["FWD"],"hp":147},
+      {"model":"Leaf(?: SV/SL)? \\(62 kW-hr battery pack\\)","years":[2019,2025],"fuel":"EV","drives":["FWD"],"hp":214},
+      {"model":"Leaf SV","years":[2023,2025],"fuel":"EV","drives":["FWD"],"hp":214}
+    ]
+  },
+  {
+    "make": "Nissan", "name": "Nissan 2026 LEAF 75 kWh electric drive",
+    "url": "https://usa.nissannews.com/en-US/releases/2026-nissan-leaf-press-kit",
+    "ratings": [{"model":"Leaf 75kWh \\((?:18 inch (?:alloy|steel)|19 inch) Wheels\\)","years":[2026,2026],"fuel":"EV","drives":["FWD"],"hp":214}]
+  },
+  {
+    "make": "Chevrolet", "name": "Chevrolet Bolt EV technical information",
+    "url": "https://media.chevrolet.com/content/dam/Media/images/US/Vehicles/Chevrolet/Cars/BoltEV/2023/2023-Chevrolet-Bolt-EV-062422.pdf",
+    "ratings": [{"model":"Bolt EV","years":[2017,2023],"fuel":"EV","drives":["FWD"],"hp":200}]
+  },
+  {
+    "make": "Chevrolet", "name": "Chevrolet Bolt EUV technical information",
+    "url": "https://media.chevrolet.com/content/dam/Media/images/US/Vehicles/Chevrolet/Cars/BoltEUV/2023/2023-Chevrolet-Bolt-EUV-062422.pdf",
+    "ratings": [{"model":"Bolt EUV","years":[2022,2023],"fuel":"EV","drives":["FWD"],"hp":200}]
+  }
+]

@@ -23,6 +23,9 @@ The importer uses body style when available and prefers exterior front views.
   [`pipeline/photo-generations.json`](../pipeline/photo-generations.json).
   The interface displays the pictured year. This is a representative photo of
   the generation, with potential differences in trim, equipment, and styling.
+  Some source titles identify only a year span. RoadFit uses those images only
+  when the whole span falls inside the sourced U.S. range and omits the exact
+  pictured year.
 - A branded placeholder appears when a match or image file is unavailable.
 
 The browser reads `public/data/vehicle-images.json` separately from the vehicle
@@ -60,6 +63,7 @@ and `model` columns, then pass the output to the builder. The source search
 caches successful requests and accepts `--limit` for smaller passes.
 
 ```bash
+python scripts/data/plan_commons_photo_targets.py --limit 300 --output targets.csv
 python scripts/data/fetch_commons_vehicle_photos.py --targets targets.csv --output pipeline/cache/commons-vehicle-photos.csv
 python scripts/data/build_vehicle_photos.py --additional pipeline/cache/commons-vehicle-photos.csv --plan
 python scripts/data/build_vehicle_photos.py --additional pipeline/cache/commons-vehicle-photos.csv

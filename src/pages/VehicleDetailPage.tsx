@@ -125,6 +125,9 @@ export function VehicleDetailPage() {
   const adjustedBudgetParams = new URLSearchParams(discoveryParams);
   adjustedBudgetParams.set('max', String(Math.max(price?.average ?? budget, budget)));
   const generation = vehicle.generation;
+  const epaDetails = vehicle.sourceDetails;
+  const horsepowerLabel = epaDetails?.horsepowerScope === 'system' ? 'System horsepower'
+    : epaDetails?.horsepowerScope === 'test-vehicle' ? 'EPA test-car horsepower' : 'Horsepower';
   const generationParams = generation ? new URLSearchParams({
     make: vehicle.make, model: vehicle.model, y0: String(generation.startYear), y1: String(generation.endYear), priced: 'any', max: 'any',
   }) : null;
@@ -183,16 +186,32 @@ export function VehicleDetailPage() {
                 <SpecItem label="Drivetrain" value={vehicle.specs?.drivetrain} />
                 <SpecItem label="Cylinders" value={vehicle.specs?.cylinders} />
                 <SpecItem label="Displacement" value={vehicle.specs?.displacementL ? `${vehicle.specs.displacementL} L` : null} />
-                <SpecItem label="Horsepower" value={vehicle.specs?.horsepower ? `${vehicle.specs.horsepower} hp` : null} />
+                <SpecItem label={horsepowerLabel} value={vehicle.specs?.horsepower ? `${vehicle.specs.horsepower} hp` : null} />
                 <SpecItem label="City / highway" value={vehicle.specs?.mpgCity && vehicle.specs?.mpgHighway ? `${vehicle.specs.mpgCity} / ${vehicle.specs.mpgHighway} ${efficiencyUnit}` : null} />
                 <SpecItem label="Doors" value={vehicle.specs?.doors} />
                 <SpecItem label="Seats" value={vehicle.specs?.seats} icon={UsersRound} />
                 <SpecItem label="EPA class" value={vehicle.sourceDetails?.epaVehicleClass} />
-                {vehicle.sourceDetails?.electricRangeMiles ? <SpecItem label="Electric range" value={`${vehicle.sourceDetails.electricRangeMiles} mi`} /> : null}
+                {epaDetails?.electricMotorDescription ? <SpecItem label="EPA motor specification" value={epaDetails.electricMotorDescription} /> : null}
               </div>
               {vehicle.sourceDetails?.seatingNote ? <p className="missing-note"><UsersRound aria-hidden="true" /> {vehicle.sourceDetails.seatingNote}</p> : null}
               <p className="missing-note"><Info aria-hidden="true" /> Specifications show available data for this configuration. See Sources for the evidence behind added horsepower, door, or seat counts.</p>
             </section>
+
+            {epaDetails && (epaDetails.annualFuelCostUsd != null || epaDetails.tailpipeCo2GramsPerMile != null || epaDetails.electricRangeMiles != null) ? (
+              <section className="detail-panel">
+                <div className="panel-heading"><div><span className="section-kicker">EPA / DOE estimates</span><h2>Fuel and charging</h2></div></div>
+                <div className="spec-grid">
+                  {epaDetails.annualFuelCostUsd != null ? <SpecItem label="Estimated annual fuel cost" value={formatCurrency(epaDetails.annualFuelCostUsd)} /> : null}
+                  {epaDetails.tailpipeCo2GramsPerMile != null ? <SpecItem label="Tailpipe CO₂" value={`${formatNumber(epaDetails.tailpipeCo2GramsPerMile)} g/mi`} /> : null}
+                  {epaDetails.electricRangeMiles != null ? <SpecItem label={epaDetails.electricRangeScope === 'charge-depleting' ? 'Charge-depleting range' : 'Electric range'} value={`${epaDetails.electricRangeMiles} mi`} /> : null}
+                  {epaDetails.electricityKwhPer100Miles != null ? <SpecItem label="Electricity use" value={`${epaDetails.electricityKwhPer100Miles} kWh / 100 mi`} /> : null}
+                  {epaDetails.chargeTimeHours240V != null ? <SpecItem label="240 V charging time" value={`${epaDetails.chargeTimeHours240V} hr`} /> : null}
+                </div>
+                <p className="missing-note"><Info aria-hidden="true" /> Annual fuel estimates use EPA fuel prices, 15,000 miles, and 55% city driving. Tailpipe CO₂ excludes electricity and fuel production. Actual charging times vary.</p>
+                {epaDetails.electricRangeScope === 'charge-depleting' ? <p className="missing-note"><Info aria-hidden="true" /> This plug-in hybrid can use gasoline while its battery is discharging.</p> : null}
+                <a className="text-link" href="https://www.fueleconomy.gov/feg/ws/index.shtml" target="_blank" rel="noreferrer">EPA estimate definitions <ExternalLink aria-hidden="true" /></a>
+              </section>
+            ) : null}
 
             {alternatives.length ? <section className="detail-panel"><div className="panel-heading"><div><span className="section-kicker">Same model-year</span><h2>Alternative configurations</h2></div><span>{alternatives.length} shown</span></div><div className="alternative-list">{alternatives.map((candidate) => {
               const candidateParams = new URLSearchParams(discoveryParams);

@@ -31,6 +31,7 @@ REJECT = re.compile(r'\b(?:interior|dashboard|cockpit|steering wheel|engine bay|
 FORBIDDEN_VARIANT = re.compile(r'\b(?:raptor|shelby|saleen|roush|gt350r?|gt500|hellcat|demon|trackhawk|type r|nismo|st line|gr sport|brabus|blackwing|gtr|amg|zr1|z06|trans am|sti|wrx|super duty|lightning|electric|plug in|phev|hybrid|bullitt|mach 1|dark horse|gtd|classic|warlock|trx|ltd|ld|axio|fielder|altis|europa|superleggera|interceptor|tremor|trd pro|woodland edition|plaid)\b')
 DRIVE = re.compile(r'\b(?:2wd|4wd|awd|fwd|rwd|4x4|4x2|quattro|xdrive|4matic)\b')
 YEAR_FIRST = re.compile(r"^(?:(19[5-9]\d|20[0-3]\d)|['’](\d{2}))[ _-]+(.+)$", re.I)
+YEAR_SPAN_FIRST = re.compile(r"^['’]?((?:19|20)?\d{2})\s*[-–—]\s*['’]?((?:19|20)?\d{2})[ _-]+(.+)$")
 BODY = {
     'convertible': r'convertible|cabriolet|cabrio|roadster|spider|spyder|volante|targa|soft top',
     'wagon': r'wagon|station wagon|avant|estate|sportbrake|touring sports|allroad|tourx',
@@ -136,6 +137,19 @@ def title_models(tail: str, make: str, pairs: set[tuple[str, str]]) -> set[str]:
     }
 
 
+def year_span(name: str) -> tuple[int, int, str] | None:
+    """Parse an explicit model-year range without assigning the photo a specific year."""
+    match = YEAR_SPAN_FIRST.fullmatch(name)
+    if not match:
+        return None
+    first, last, tail = match.groups()
+    start = int(first) + (1900 if int(first) >= 50 else 2000) if len(first) == 2 else int(first)
+    end = int(last) + (start // 100 * 100 if len(last) == 2 else 0)
+    if end < start and len(last) == 2:
+        end += 100
+    return (start, end, tail) if 1984 <= start < end <= 2039 and end - start <= 12 else None
+
+
 def photo_candidate(row: dict, pairs: set[tuple[str, str]]) -> dict | None:
     title = row.get('source_filename', '')
     if not title or not allowed_credit(row):
@@ -153,6 +167,8 @@ def photo_candidate(row: dict, pairs: set[tuple[str, str]]) -> dict | None:
 
     verified = row.get('verified_exterior', '').lower() in {'1', 'true'}
     match = YEAR_FIRST.fullmatch(name)
+    labeled_tail = match[3] if match else None
+    span = None
     if verified:
         make, model = make_key(row.get('match_make', '')), model_key(row.get('match_model', ''))
         try:
@@ -166,22 +182,27 @@ def photo_candidate(row: dict, pairs: set[tuple[str, str]]) -> dict | None:
         if archive.netloc != 'carimages.org' or len(path) < 3 or path[0] != 'cars':
             return None
         make, model = make_key(path[1]), model_key(path[2])
-        if not match:
+        if parsed_span := year_span(name):
+            start, end, labeled_tail = parsed_span
+            span = (start, end)
+            year = None
+        elif match:
+            short = int(match[2]) if match[2] else None
+            year = int(match[1]) if match[1] else short + (1900 if short >= 50 else 2000)
+        else:
             return None
-        short = int(match[2]) if match[2] else None
-        year = int(match[1]) if match[1] else short + (1900 if short >= 50 else 2000)
         north_america = US_CUE.search(normalized) or re.search(r'\((?:US|USA|U\.S\.)\)', title, re.I)
-        if model not in title_models(match[3], make, pairs) or ((make, model) in MARKET_AMBIGUOUS and not north_america):
+        if model not in title_models(labeled_tail, make, pairs) or ((make, model) in MARKET_AMBIGUOUS and not north_america):
             return None
         # Two makes, e.g. 'Toyota Tacoma & Honda Civic', are not a reliable subject.
         if '&' in title or re.search(r'\b(?:and|versus|vs)\b', normalized):
             return None
-    if (make, model) not in pairs or not 1984 <= year <= 2039:
+    if (make, model) not in pairs or (year is not None and not 1984 <= year <= 2039):
         return None
     if any(key(v) not in model for v in FORBIDDEN_VARIANT.findall(normalized)):
         return None
-    if match:
-        labeled_models = title_models(match[3], make, pairs)
+    if labeled_tail:
+        labeled_models = title_models(labeled_tail, make, pairs)
         if any(other != model and other.startswith(model) and other != model + body_of(normalized) for other in labeled_models):
             return None  # A longer nameplate such as Taurus X or Rogue Sport is a different vehicle.
     excluded = MODEL_EXCLUSIONS.get((make, model))
@@ -195,7 +216,7 @@ def photo_candidate(row: dict, pairs: set[tuple[str, str]]) -> dict | None:
             + 2 * bool(re.search(r'\b(?:left|right|quarter)\b', normalized))
             + 2 * ('rear' not in normalized and 'side profile' not in normalized)
             + min(width / 1200, 1.5) - abs(width / height - 1.65))
-    return dict(row=row, make=make, model=model, year=year, body=body, rank=rank, image_id=source_id)
+    return dict(row=row, make=make, model=model, year=year, span=span, body=body, rank=rank, image_id=source_id)
 
 
 def target_body(vehicle: dict) -> str:
@@ -224,12 +245,17 @@ def compatible(candidate: dict, vehicle: dict) -> bool:
 def load_choices(vehicles: list[dict], paths: list[Path], ranges_path: Path) -> dict[str, list[tuple[dict, str]]]:
     pairs = {(make_key(v['make']), model) for v in vehicles for model in (model_key(v['model']), model_family(v['model'])) if model}
     by_pair = defaultdict(lambda: defaultdict(list))
+    spans_by_pair = defaultdict(list)
     for path in paths:
         with path.open(encoding='utf-8-sig', newline='') as file:
             for row in csv.DictReader(file):
                 item = photo_candidate(row, pairs)
                 if item:
-                    by_pair[(item['make'], item['model'])][item['year']].append(item)
+                    pair = item['make'], item['model']
+                    if item['span']:
+                        spans_by_pair[pair].append(item)
+                    else:
+                        by_pair[pair][item['year']].append(item)
     ranges = defaultdict(list)
     if ranges_path.exists():
         for record in json.loads(ranges_path.read_text(encoding='utf-8'))['ranges']:
@@ -255,6 +281,12 @@ def load_choices(vehicles: list[dict], paths: list[Path], ranges_path: Path) -> 
                 body = (bounds.get('bodyStyle') or '').lower()
                 if body and target_body(v) != body:
                     continue
+                for photo in spans_by_pair[identity]:
+                    start, end = photo['span']
+                    if bounds['start'] <= start <= year <= end <= bounds['end'] and compatible(photo, v) and (
+                            not body or photo['body'] == body or
+                            (not photo['body'] and body in {'pickup', 'suv', 'van', 'minivan'})):
+                        candidates.append((dict(photo, range_source=bounds['source']), 'generation'))
                 for other_year, photos in by_pair[identity].items():
                     if identity == ('chevrolet', 'silverado1500') and other_year in {2019, 2022}:
                         continue
@@ -262,7 +294,7 @@ def load_choices(vehicles: list[dict], paths: list[Path], ranges_path: Path) -> 
                         candidates.extend((dict(c, range_source=bounds['source']), 'generation') for c in photos
                                           if compatible(c, v) and (not body or c['body'] == body or
                                              (not c['body'] and body in {'pickup', 'suv', 'van', 'minivan'})))
-        candidates.sort(key=lambda item: (item[1] != 'model-year', abs(year - item[0]['year']),
+        candidates.sort(key=lambda item: (item[1] != 'model-year', abs(year - item[0]['year']) if item[0]['year'] else 1,
                                          -item[0]['rank'], item[0]['image_id']))
         if candidates:
             choices[v['id']] = candidates[:4]
@@ -365,7 +397,8 @@ def select_index(choices: dict) -> dict:
                    ('copyrightNotice', 'copyright_notice'), ('creatorUrl', 'creator_url'))
                    if row.get(column) and (field != 'creatorUrl' or row[column].startswith('https://'))},
                 'license': row['license_name'], 'licenseUrl': row['license_url'], 'scope': scope,
-                'depictedYear': photo['year'], 'alt': subject,
+                'alt': subject,
+                **({'depictedYear': photo['year']} if photo['year'] is not None else {}),
                 **({'generationSource': photo['range_source']} if scope == 'generation' else {}),
             }
             assignments[vehicle_id] = image_id
@@ -429,8 +462,8 @@ def main() -> None:
         if temp.stat().st_size < 1_000_000:
             raise ValueError('Unexpectedly small CarImages rights manifest')
         temp.replace(args.rights)
-    supplemental = ROOT / 'pipeline/photo-commons.csv'
-    paths = [args.rights, *([supplemental] if supplemental.exists() else []), *args.additional]
+    supplemental = [ROOT / 'pipeline/photo-commons.csv', ROOT / 'pipeline/photo-commons-expansion.csv']
+    paths = [args.rights, *(path for path in supplemental if path.exists()), *args.additional]
     choices = load_choices(vehicles, paths, args.ranges)
     print(f'Candidates: {len(choices):,} of {len(vehicles):,} configurations; '
           f'{len({(by_id[x]["make"], by_id[x]["model"], by_id[x]["year"]) for x in choices}):,} model-years', flush=True)

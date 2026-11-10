@@ -12,7 +12,7 @@ const sources = [
     url: 'https://www.fueleconomy.gov/feg/download.shtml',
     licenseUrl: 'https://pasteur.epa.gov/license/sciencehub-license.html',
     license: 'U.S. federal government public data',
-    description: 'Model years 1984–present, including engine displacement, cylinders, transmission, drivetrain, fuel type, MPG/MPGe, electric range, and EPA vehicle class where populated.',
+    description: 'Model years 1984–present, with powertrain specs, efficiency, published fuel-cost and tailpipe CO₂ estimates, and electric or plug-in charging and range figures where available.',
   },
   {
     name: 'NHTSA vPIC',
@@ -28,15 +28,15 @@ const sources = [
     url: 'https://www.epa.gov/compliance-and-fuel-economy-data/data-cars-used-testing-fuel-economy',
     licenseUrl: 'https://pasteur.epa.gov/license/sciencehub-license.html',
     license: 'U.S. federal government public data',
-    description: 'Rated horsepower from EPA test records is joined where vehicle and powertrain evidence identifies a consistent rating. Ambiguous matches remain unavailable.',
+    description: 'Rated horsepower from modern and archived EPA test records requires a consistent vehicle and powertrain match. Selected hybrid and EV models use manufacturer-published system output.',
   },
   {
     name: 'NHTSA SaferCar',
-    label: 'Doors and seating',
+    label: 'Doors, seating, and body style',
     url: 'https://www.nhtsa.gov/nhtsa-datasets-and-apis',
     licenseUrl: 'https://www.nhtsa.gov/nhtsa-datasets-and-apis',
     license: 'U.S. federal government public data',
-    description: 'Safety test records can confirm doors and seating for a model and body configuration. Manufacturer documentation supplies selected U.S. generation names and model-year ranges.',
+    description: 'Safety test records can confirm doors and seating. Model-year vehicle patterns in the standalone vPIC database fill additional body and cabin facts where matching variants agree.',
   },
   {
     name: 'ForCar Open Data',

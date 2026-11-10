@@ -1,6 +1,6 @@
 import unittest
 
-from generation_specs import enrich_vehicle, load_generation_specs, read_ncap_seats
+from generation_specs import BodySpec, enrich_vehicle, enrich_vpic_body, load_generation_specs, read_ncap_seats
 
 
 class GenerationSpecsTests(unittest.TestCase):
@@ -50,6 +50,15 @@ class GenerationSpecsTests(unittest.TestCase):
         self.assertNotIn('generation', self.vehicle(2013, 'Toyota', 'RAV4 EV'))
         self.assertNotIn('generation', self.vehicle(2010, 'Honda', 'Accord Crosstour'))
         self.assertNotIn('generation', self.vehicle(2024, 'Ford', 'Mustang Mach-E'))
+
+    def test_vpic_fills_agreement_and_preserves_body_conflicts(self):
+        record = {'year': 2020, 'make': 'Example', 'model': 'Nameplate', 'specs': {}, 'provenance': []}
+        index = {(2020, 'example', 'nameplate'): [BodySpec((), 'coupe', 2, 4), BodySpec((), 'sedan', 4, 4)]}
+        enrich_vpic_body(record, index)
+        self.assertEqual(record['specs'], {'seats': 4})
+        self.assertNotIn('bodyStyle', record)
+        enrich_vpic_body({**record, 'model': 'Nameplate Coupe'}, index)
+        self.assertEqual(record['specs']['doors'], 2)
 
 
 if __name__ == '__main__':

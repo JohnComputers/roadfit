@@ -31,8 +31,10 @@ const ROWS: CompareRow[] = [
   { label: 'Drivetrain', get: (v) => v.specs?.drivetrain || 'Unavailable' },
   { label: 'Combined efficiency', get: (v) => v.specs?.mpgCombined ? `${v.specs.mpgCombined} ${v.sourceDetails?.efficiencyUnit || (v.specs?.fuelType?.toLowerCase() === 'ev' ? 'MPGe' : 'MPG')}` : 'Unavailable', numeric: (v) => v.specs?.mpgCombined, best: 'max' },
   { label: 'City / highway', get: (v) => v.specs?.mpgCity && v.specs?.mpgHighway ? `${v.specs.mpgCity} / ${v.specs.mpgHighway}` : 'Unavailable' },
-  { label: 'Horsepower', get: (v) => v.specs?.horsepower ? `${v.specs.horsepower} hp` : 'Unavailable', numeric: (v) => v.specs?.horsepower, best: 'max' },
-  { label: 'Electric range', get: (v) => v.sourceDetails?.electricRangeMiles ? `${v.sourceDetails.electricRangeMiles} mi` : 'Unavailable', numeric: (v) => v.sourceDetails?.electricRangeMiles, best: 'max' },
+  { label: 'Horsepower', get: (v) => v.specs?.horsepower ? `${v.specs.horsepower} hp${v.sourceDetails?.horsepowerScope === 'system' ? ' (system)' : v.sourceDetails?.horsepowerScope === 'test-vehicle' ? ' (EPA test car)' : ''}` : 'Unavailable', numeric: (v) => v.specs?.horsepower, best: 'max' },
+  { label: 'EPA annual fuel cost estimate', get: (v) => v.sourceDetails?.annualFuelCostUsd != null ? formatCurrency(v.sourceDetails.annualFuelCostUsd) : 'Unavailable', numeric: (v) => v.sourceDetails?.annualFuelCostUsd, best: 'min' },
+  { label: 'EPA tailpipe CO₂', get: (v) => v.sourceDetails?.tailpipeCo2GramsPerMile != null ? `${formatNumber(v.sourceDetails.tailpipeCo2GramsPerMile)} g/mi` : 'Unavailable', numeric: (v) => v.sourceDetails?.tailpipeCo2GramsPerMile, best: 'min' },
+  { label: 'Plug-in / EV range', get: (v) => v.sourceDetails?.electricRangeMiles ? `${v.sourceDetails.electricRangeMiles} mi${v.sourceDetails.electricRangeScope === 'charge-depleting' ? ' (blended)' : ''}` : 'Unavailable' },
 ];
 
 export function ComparePage() {

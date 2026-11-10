@@ -31,14 +31,28 @@ The [EPA Fuel Economy Test Car List](https://www.epa.gov/compliance-and-fuel-eco
 provides engine ratings. RoadFit joins by make, model year, model, cylinders,
 displacement, transmission, drivetrain, and fuel. The join requires agreeing
 ratings and a unique guide engine signature. Hybrid and electric system power
-requires separate evidence. Selected OEM technical documents support exact
-ratings for additional EPA configurations.
+requires separate evidence. Selected manufacturer documents supply those
+ratings for matched hybrid and EV configurations. For model years 1984–1997,
+archived test records also require the EPA basic engine index, when the guide
+retains it. Model years 1998–1999 require an unambiguous guide configuration and
+agreement among the test records. The oldest ZIP archives require Info-ZIP
+`unzip` to refresh the horsepower snapshot.
+EPA ratings describe test cars and can differ from factory-advertised output.
+RoadFit labels EPA test-car horsepower and prefers a verified factory rating
+for explicitly identified configurations.
 
 The [NHTSA SaferCar dataset](https://www.nhtsa.gov/nhtsa-datasets-and-apis#safercar-data)
 provides reported seat counts and door information. Compatible year, model,
 body, and drivetrain entries must agree before a single value is added. Vehicle
 records retain links to these sources. The [generation rules](../pipeline/vehicle-generations.json)
 record U.S. year ranges and manufacturer citations, including Corvette C4–C8.
+The [standalone vPIC database](https://vpic.nhtsa.dot.gov/Downloads) fills more
+body styles, doors, and seats when applicable model-year patterns agree.
+
+FuelEconomy.gov also supplies estimated annual fuel cost, tailpipe CO₂,
+electricity use, charging time, and plug-in range. The catalog uses the
+alternative-fuel range for plug-in hybrids and labels blended charge-depleting
+range separately. See the [EPA field definitions](https://www.fueleconomy.gov/feg/ws/index.shtml).
 
 The weekly catalog build uses checked-in enrichment snapshots. To refresh them
 deliberately before rebuilding, run these commands from the repository root.
@@ -46,6 +60,7 @@ deliberately before rebuilding, run these commands from the repository root.
 ```bash
 python scripts/data/epa_horsepower.py
 python scripts/data/generation_specs.py --refresh-ncap
+python scripts/data/vpic_body_specs.py --download
 python scripts/data/build_catalog.py
 python scripts/data/validate_catalog.py
 ```

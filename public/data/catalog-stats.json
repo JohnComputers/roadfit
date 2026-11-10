@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": "178d89d0eb4f686e",
-  "generatedAt": "2026-11-09T22:18:46Z",
+  "catalogVersion": "485420c380ecd524",
+  "generatedAt": "2026-11-10T01:01:38Z",
   "total": 49704,
   "priced": 15279,
   "priceUnavailable": 34425,
   "priceCoveragePercent": 30.74,
   "specCoverage": {
-    "horsepower": 6915,
-    "doors": 11467,
-    "seats": 8390,
+    "horsepower": 15251,
+    "doors": 11555,
+    "seats": 8534,
     "generation": 3106
   },
   "makes": 146,
